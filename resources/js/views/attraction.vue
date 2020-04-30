@@ -81,7 +81,7 @@
                             <table class="hours-table">
                                 <tr>
                                     <td class="day">Sunday</td>
-                                    <td>{{businessHours[0].open_time}} <span v-if="businessHours[1].open_time !== 'CLOSED'">&dash;</span> {{businessHours[0].close_time}}</td>
+                                    <td>{{businessHours[0].open_time}} <span v-if="businessHours[0].open_time !== 'CLOSED'">&dash;</span> {{businessHours[0].close_time}}</td>
                                 </tr>
 
                                 <tr>
@@ -91,27 +91,27 @@
 
                                 <tr>
                                     <td class="day">Tuesday</td>
-                                    <td>{{businessHours[2].open_time}} <span v-if="businessHours[1].open_time !== 'CLOSED'">&dash;</span> {{businessHours[2].close_time}}</td>
+                                    <td>{{businessHours[2].open_time}} <span v-if="businessHours[2].open_time !== 'CLOSED'">&dash;</span> {{businessHours[2].close_time}}</td>
                                 </tr>
 
                                 <tr>
                                     <td class="day">Wednesday</td>
-                                    <td>{{businessHours[3].open_time}} <span v-if="businessHours[1].open_time !== 'CLOSED'">&dash;</span> {{businessHours[3].close_time}}</td>
+                                    <td>{{businessHours[3].open_time}} <span v-if="businessHours[3].open_time !== 'CLOSED'">&dash;</span> {{businessHours[3].close_time}}</td>
                                 </tr>
 
                                 <tr>
                                     <td class="day">Thursday</td>
-                                    <td>{{businessHours[4].open_time}} <span v-if="businessHours[1].open_time !== 'CLOSED'">&dash;</span> {{businessHours[4].close_time}}</td>
+                                    <td>{{businessHours[4].open_time}} <span v-if="businessHours[4].open_time !== 'CLOSED'">&dash;</span> {{businessHours[4].close_time}}</td>
                                 </tr>
 
                                 <tr>
                                     <td class="day">Friday</td>
-                                    <td>{{businessHours[5].open_time}} <span v-if="businessHours[1].open_time !== 'CLOSED'">&dash;</span> {{businessHours[5].close_time}}</td>
+                                    <td>{{businessHours[5].open_time}} <span v-if="businessHours[5].open_time !== 'CLOSED'">&dash;</span> {{businessHours[5].close_time}}</td>
                                 </tr>
 
                                 <tr>
                                     <td class="day">Saturday</td>
-                                    <td>{{businessHours[6].open_time}} <span v-if="businessHours[1].open_time !== 'CLOSED'">&dash;</span> {{businessHours[6].close_time}}</td>
+                                    <td>{{businessHours[6].open_time}} <span v-if="businessHours[6].open_time !== 'CLOSED'">&dash;</span> {{businessHours[6].close_time}}</td>
                                 </tr>
                             </table>
                         </div>
