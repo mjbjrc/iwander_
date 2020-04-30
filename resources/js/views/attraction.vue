@@ -81,37 +81,37 @@
                             <table class="hours-table">
                                 <tr>
                                     <td class="day">Sunday</td>
-                                    <td>{{moment(businessHours[0].open_time, "HH:mm:ss").format('HH:mm')}} &dash; {{moment(businessHours[0].close_time, "HH:mm:ss").format('HH:mm')}} <span v-if="businessHours[0].open_time === null">Closed</span></td>
+                                    <td>{{businessHours[0].open_time}} <span v-if="businessHours[1].open_time !== 'CLOSED'">&dash;</span> {{businessHours[0].close_time}}</td>
                                 </tr>
 
                                 <tr>
                                     <td class="day">Monday</td>
-                                    <td>{{moment(businessHours[1].open_time, "HH:mm:ss").format('HH:mm')}} &dash; {{moment(businessHours[1].close_time, "HH:mm:ss").format('HH:mm')}} <span v-if="businessHours[1].open_time === null">Closed</span></td>
+                                    <td>{{businessHours[1].open_time}} <span v-if="businessHours[1].open_time !== 'CLOSED'">&dash;</span> {{businessHours[1].close_time}}</td>
                                 </tr>
 
                                 <tr>
                                     <td class="day">Tuesday</td>
-                                    <td>{{moment(businessHours[2].open_time, "HH:mm:ss").format('HH:mm')}} &dash; {{moment(businessHours[2].close_time, "HH:mm:ss").format('HH:mm')}} <span v-if="businessHours[2].open_time === null">Closed</span></td>
+                                    <td>{{businessHours[2].open_time}} <span v-if="businessHours[1].open_time !== 'CLOSED'">&dash;</span> {{businessHours[2].close_time}}</td>
                                 </tr>
 
                                 <tr>
                                     <td class="day">Wednesday</td>
-                                    <td>{{moment(businessHours[3].open_time, "HH:mm:ss").format('HH:mm')}} &dash; {{moment(businessHours[3].close_time, "HH:mm:ss").format('HH:mm')}} <span v-if="businessHours[3].open_time === null">Closed</span></td>
+                                    <td>{{businessHours[3].open_time}} <span v-if="businessHours[1].open_time !== 'CLOSED'">&dash;</span> {{businessHours[3].close_time}}</td>
                                 </tr>
 
                                 <tr>
                                     <td class="day">Thursday</td>
-                                    <td>{{moment(businessHours[4].open_time, "HH:mm:ss").format('HH:mm')}} &dash; {{moment(businessHours[4].close_time, "HH:mm:ss").format('HH:mm')}} <span v-if="businessHours[4].open_time === null">Closed</span></td>
+                                    <td>{{businessHours[4].open_time}} <span v-if="businessHours[1].open_time !== 'CLOSED'">&dash;</span> {{businessHours[4].close_time}}</td>
                                 </tr>
 
                                 <tr>
                                     <td class="day">Friday</td>
-                                    <td>{{moment(businessHours[5].open_time, "HH:mm:ss").format('HH:mm')}} &dash; {{moment(businessHours[5].close_time, "HH:mm:ss").format('HH:mm')}} <span v-if="businessHours[5].open_time === null">Closed</span></td>
+                                    <td>{{businessHours[5].open_time}} <span v-if="businessHours[1].open_time !== 'CLOSED'">&dash;</span> {{businessHours[5].close_time}}</td>
                                 </tr>
 
                                 <tr>
                                     <td class="day">Saturday</td>
-                                    <td>{{moment(businessHours[6].open_time, "HH:mm:ss").format('HH:mm')}} &dash; {{moment(businessHours[6].close_time, "HH:mm:ss").format('HH:mm')}} <span v-if="businessHours[6].open_time === null">Closed</span></td>
+                                    <td>{{businessHours[6].open_time}} <span v-if="businessHours[1].open_time !== 'CLOSED'">&dash;</span> {{businessHours[6].close_time}}</td>
                                 </tr>
                             </table>
                         </div>
@@ -229,6 +229,17 @@ export default {
                 .then(response => {
                     app.attraction = response.data.data;
                     app.businessHours = response.data.hours;
+
+                    app.businessHours.forEach((hours) => {
+                      if(hours.open_time === null && hours.close_time === null){
+                        hours.open_time = "CLOSED";
+                      }
+                      else{
+                          hours.open_time = moment(hours.open_time, "HH:mm:ss").format('HH:mm');
+                          hours.close_time = moment(hours.close_time, "HH:mm:ss").format('HH:mm');
+                      }
+                    });
+
                     app.attractionLoaded = true;
                     // console.log('attraction:',attractionData);
                 })
@@ -300,11 +311,11 @@ export default {
 
         getSimilarAttractions() {
             let app = this;
-            axios.get(`/api/getAttractionsByCategories/${app.categories}`)
+            axios.get(`/api/getAttractionsByCategories/${app.categories}/${app.attraction.addresses.city.name}`)
                 .then(response => {
                     let results = response.data.data;
                     let res_id = '';
-
+                    console.log(results);
                     // console.log(response);
                     results.forEach((res) => {
                         // console.log(res);
@@ -314,6 +325,7 @@ export default {
                             results.slice(res_id, 1);
                         }
 
+                        //get lists of categories of each attraction
                         axios.get(`/api/getCategoriesOfAttraction/${res.id}`)
                             .then(response => {
                                 let categories = [];
