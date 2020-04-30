@@ -127,7 +127,7 @@ export default {
         getAttractions() {
             let app = this;
             // console.log('Attraction - get cities:', app.itinerary.destination);
-            axios.get(`/api/getAttractions/${ app.itinerary.destination}`)
+            axios.get(`/api/getAttractions/${app.itinerary.destination}`)
                 .then(response => {
                     app.attractions = response.data.data;
                 })
@@ -183,14 +183,18 @@ export default {
                 app.keywordsValues = '0';
             } else if (app.categoryValues.length === 0) {
                 app.categoryValues = '0';
+            } else if ((app.categoryValues.length === 0) && (app.keywordsValues.length === 0)) {
+                app.keywordsValues = '0';
+                app.categoryValues = '0';
             }
-
+            console.log(app.itinerary.destination);
             axios.all([
-                    axios.get(`/api/getAttractionsByKeywords/${app.keywordsValues}`),
-                    axios.get(`/api/getAttractionsByCategories/${app.categoryValues}`)
+                    axios.get(`/api/getAttractionsByKeywords/${app.keywordsValues}/${app.itinerary.destination}`),
+                    axios.get(`/api/getAttractionsByCategories/${app.categoryValues}/${app.itinerary.destination}`)
                 ])
                 .then(axios.spread((...results) => {
                     let resultsData = [];
+                    console.log(results);
                     // console.log('res', results);
                     results.forEach(result => {
                         if (result.data.data !== null) {

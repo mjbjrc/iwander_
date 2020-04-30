@@ -25,7 +25,13 @@ class CategoryController extends Controller
 
     //get attractions by category
     public function getAttractionsByCategories($categories, $city){
-
+      if($categories == 0){
+        //return null
+        $attractionsData = null;
+        return response()->json(['message'=> 'No data', 'data' => $attractionsData]);
+      }
+      else {
+        // breaks the string into an array
       $ids = explode(",", $categories);
       $category = Category::whereIn('id', $ids)->get();
       $categoriesData = array();
@@ -37,6 +43,7 @@ class CategoryController extends Controller
             }
         }
       }
+    }
       return response()->json(['data' => $categoriesData], 200);
     }
 
