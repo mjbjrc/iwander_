@@ -176,16 +176,21 @@
         <!---------- SECTION END ---------->
     </div>
     <addToItinerary v-if="show_modal" @submit="show_modal = false" @close="show_modal = false" :aOr="addToItineraryKey" :id="addToItineraryID"> </addToItinerary>
+    <alert v-if="show_alert" @close="show_alert = false" :alertMessage="alertMessage"> </alert>
+
 </div>
 </template>
 <script>
 import addToItinerary from '../components/addToItinerary'
+import alert from '../components/alert'
+
+
 var moment = require('moment');
 
 export default {
     name: 'attraction',
     components: {
-        addToItinerary
+        addToItinerary, alert
     },
     props: ['app', 'att_id', 'user'],
     data() {
@@ -200,7 +205,9 @@ export default {
             businessHours: [],
             categories_name: [],
             isLoaded: false,
-            attractionLoaded: false
+            attractionLoaded: false,
+            alertMessage: "",
+            show_alert: false,
         }
     },
     watch: {
@@ -224,7 +231,7 @@ export default {
     methods: {
         getAttraction() {
             let app = this;
-            console.log(app.att_id);
+            // console.log(app.att_id);
             axios.get(`/api/getAttraction/${app.att_id}`)
                 .then(response => {
                     app.attraction = response.data.data;
@@ -265,6 +272,8 @@ export default {
                     .then(response => {
                         console.log("ATTRACTION SUCCESSFULLY ADDED TO BOOKMARK");
                         // console.log(response.data);
+                        app.alertMessage = "Added to bookmarks!";
+                        app.show_alert = true;
                     })
                     .catch(function(error) {
                         console.log(error);
@@ -287,7 +296,7 @@ export default {
                 this.$router.push({
                     name: 'login'
                 });
-                window.scrollTo(0, 0);
+                // window.scrollTo(0, 0);
             }
         },
         getCategory() {
