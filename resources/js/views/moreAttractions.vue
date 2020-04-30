@@ -1,121 +1,142 @@
 <template>
-<div>
-    <div class="jumbotron jumbotron-fluid index-banner">
-        <div class="container">
-            <h2>Attractions in {{this.$route.query.destination}}</h2>
+    <div>
+        <div class="jumbotron jumbotron-fluid index-banner">
+            <div class="container">
+                <h2>Attractions in {{this.$route.query.destination}}</h2>
+            </div>
         </div>
-    </div>
 
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <div class="row">
-                    <div class="col-lg-3 col-md-3 filters-col d-none d-md-block d-lg-block">
-                        <h4>Filter</h4>
-                        <div class="filters-block">
-                            <h6>Categories:</h6>
-                            <ul class="list-group filter-selection">
-                                <div v-if="showLessCategories">
-                                    <li class="list-group-item" v-for="category in LessCategories">
-                                        <input type="checkbox" id="categoryCheckbox" :value="category.id" v-model="categoryValues">
-                                        <label for="categoryCheckbox">{{category.name}}</label>
-                                    </li>
-                                </div>
-                                <div v-else>
-                                    <li class="list-group-item" v-for="category in MoreCategories">
-                                        <input type="checkbox" id="categoryCheckbox" :value="category.id" v-model="categoryValues">
-                                        <label for="categoryCheckbox">{{category.name}}</label>
-                                    </li>
-                                </div>
-                                <a v-if="showLessCategories" @click="showLessCategories = false">Show More</a>
-                                <a v-else @click="showLessCategories = true">Show Less</a>
-                            </ul>
-                        </div>
-                        <div class="filters-block">
-                            <h6>Other:</h6>
-                            <ul class="list-group filter-selection">
-                                <div v-if="showLessKeywords">
-                                    <li class="list-group-item" v-for="keyword in LessKeywords">
-                                        <input type="checkbox" id="keywordsCheckbox" :value="keyword.id" v-model="keywordsValues">
-                                        <label for="keywordsCheckbox">{{keyword.name}}</label>
-                                    </li>
-                                </div>
-                                <div v-else>
-                                    <li class="list-group-item" v-for="keyword in MoreKeywords">
-                                        <input type="checkbox" id="keywordsCheckbox" :value="keyword.id" v-model="keywordsValues">
-                                        <label for="keywordsCheckbox">{{keyword.name}}</label>
-                                    </li>
-                                </div>
-                                <a v-if="showLessKeywords" @click="showLessKeywords = false">Show More</a>
-                                <a v-else @click="showLessKeywords = true">Show Less</a>
-                            </ul>
-                        </div>
-                        <div class="filters-button">
-                            <button type="button" class="btn-secondary-sm" @click="filter">Apply</button>
-                        </div>
-                    </div>
-                    <div class="col-lg-8 offset-lg-1 col-md-8 offset-md-1">
-                        <div class="row-index">
-                            <div class="col-12 d-none d-md-block d-lg-block">
-                                <div class="sorting-col">
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="sort-selection">
-                                                <h6>Sort by</h6>
-                                                <ul class="list-inline">
-                                                    <li class="list-inline-item">
-                                                        <a class="btn sort-selection-link" role="button" @click="setSortBy('name')">Name</a>
-                                                    </li>
+        <div class="container">
+            <div class="row">
 
-                                                    <li class="list-inline-item">
-                                                        <a class="btn sort-selection-link" role="button" @click="setSortBy('cost')">Cost</a>
-                                                    </li>
-                                                </ul>
+                <div class="col-12">
+                    <div class="row">
+
+                        <div class="col-lg-3 col-md-3 filters-col d-none d-md-block d-lg-block">
+                            <h4>Filter</h4>
+
+                            <div class="filters-block">
+                                <h6>Categories</h6>
+                                <ul class="list-group filter-selection">
+                                    <div v-if="showLessCategories">
+                                        <li class="list-group-item" v-for="category in LessCategories">
+                                            <input type="checkbox" id="categoryCheckbox" :value="category.id" v-model="categoryValues">
+                                            <label for="categoryCheckbox">{{category.name}}</label>
+                                        </li>
+                                    </div>
+                                    <div v-else>
+                                        <li class="list-group-item" v-for="category in MoreCategories">
+                                            <input type="checkbox" id="categoryCheckbox" :value="category.id" v-model="categoryValues">
+                                            <label for="categoryCheckbox">{{category.name}}</label>
+                                        </li>
+                                    </div>
+                                    <a v-if="showLessCategories" @click="showLessCategories = false">Show More</a>
+                                    <a v-else @click="showLessCategories = true">Show Less</a>
+                                </ul>
+                            </div>
+
+                            <div class="filters-block">
+                                <h6>Other</h6>
+
+                                <ul class="list-group filter-selection">
+                                    <div v-if="showLessKeywords">
+                                        <li class="list-group-item" v-for="keyword in LessKeywords">
+                                            <input type="checkbox" id="keywordsCheckbox" :value="keyword.id" v-model="keywordsValues">
+                                            <label for="keywordsCheckbox">{{keyword.name}}</label>
+                                        </li>
+                                    </div>
+                                    <div v-else>
+                                        <li class="list-group-item" v-for="keyword in MoreKeywords">
+                                            <input type="checkbox" id="keywordsCheckbox" :value="keyword.id" v-model="keywordsValues">
+                                            <label for="keywordsCheckbox">{{keyword.name}}</label>
+                                        </li>
+                                    </div>
+                                    <a v-if="showLessKeywords" @click="showLessKeywords = false">Show More</a>
+                                    <a v-else @click="showLessKeywords = true">Show Less</a>
+                                </ul>
+                            </div>
+
+                            <div class="filters-button">
+                                <button type="button" class="btn-secondary-sm" @click="filter">Apply</button>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-8 offset-lg-1 col-md-8 offset-md-1">
+
+                            <div class="row">
+                                <div class="col-12 d-none d-md-block d-lg-block">
+
+                                    <div class="sorting-col">
+                                        <div class="row">
+
+                                            <div class="col-lg-6 offset-lg-6">
+                                                <div class="sort-selection">
+                                                    <h6>Sort by</h6>
+
+                                                    <ul class="list-inline">
+                                                        <li class="list-inline-item">
+                                                            <a class="btn sort-selection-link" role="button" @click="setSortBy('name')">Name</a>
+                                                        </li>
+
+                                                        <li class="list-inline-item">
+                                                            <a class="btn sort-selection-link" role="button" @click="setSortBy('cost')">Cost</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
                                             </div>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="row items-index">
+
+                                <div class="col-12">
+                                    <div class="card-c" v-for="attraction in uniqueAttractions" :key="attraction.id">
+                                        <div class="card-c-img">
+                                            <img v-if="attraction.details.image === 'default-image.png'" :src="publicPath + attraction.details.image" />
+                                            <img v-else :src="storagePath + attraction.details.image" />
+                                        </div>
+
+                                        <div class="card-c-body">
+                                            <router-link :to="{ name: 'attraction', params: {att_id: attraction.id} }" target="_blank">
+                                                <h6>{{attraction.name}}</h6>
+                                            </router-link>
+
+                                            <p class="address">{{attraction.addresses.address1}}, {{attraction.addresses.city.name}}, {{attraction.addresses.city.districts.name}}</p>
+
+                                            <span class="card-c-button-alt">
+                                                <button @click="addToBookmarks(attraction.id)">
+                                                    <jam-heart/> Add to Bookmarks
+                                                </button>
+
+                                                <button @click="addToItinerary(0, attraction.id)">
+                                                    <jam-plus/> Add to Itinerary
+                                                </button>
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="row-index">
-                            <div class="col-12">
-                                <div class="card-c" v-for="attraction in uniqueAttractions" :key="attraction.id">
-                                    <div class="card-c-img">
-                                        <img v-if="attraction.details.image === 'default-image.png'" :src="publicPath + attraction.details.image" />
-                                        <img v-else :src="storagePath + attraction.details.image" />
-                                    </div>
-                                    <div class="card-c-body">
-                                        <router-link :to="{ name: 'attraction', params: {att_id: attraction.id} }" target="_blank">
-                                            <h6>{{attraction.name}}</h6>
-                                        </router-link>
-                                        <p class="address">{{attraction.addresses.address1}}, {{attraction.addresses.city.name}}, {{attraction.addresses.city.districts.name}}</p>
-                                        <span class="card-c-button">
-                                            <a href="#" class="card-action" title="Add to Bookmarks" @click="addToBookmarks(attraction.id)">
-                                                <span class="lnr lnr-bookmark"></span> Bookmark
-                                            </a>
 
-                                            <a href="#" class="card-action" title="Add to Bookmarks" @click="addToItinerary(0, attraction.id)">
-                                                <span class="lnr lnr-file-add"></span> Add to itinerary
-                                            </a>
-                                        </span>
-                                    </div>
+                                <div class="items-index-button">
+                                    <a class="btn btn-primary" @click="loadMore">Show More</a>
                                 </div>
-                            </div>
-                        </div>
-                        <addToItinerary v-if="show_modal" @submit="show_modal = false" @close="show_modal = false" :aOr="addToItineraryKey" :id="addToItineraryID"> </addToItinerary>
-                        <alert v-if="show_alert" @close="show_alert = false" :alertMessage="alertMessage"> </alert>
 
-                    </div>
-                    <div class="items-index-button">
-                        <a class="btn btn-primary" @click="loadMore">Show More</a>
+                            </div>
+
+                            <addToItinerary v-if="show_modal" @submit="show_modal = false" @close="show_modal = false" :aOr="addToItineraryKey" :id="addToItineraryID"> </addToItinerary>
+                            <alert v-if="show_alert" @close="show_alert = false" :alertMessage="alertMessage"> </alert>
+
+                        </div>
+
                     </div>
                 </div>
-            </div>
 
+            </div>
         </div>
     </div>
-</div>
-</div>
 </template>
 <script>
 import addToItinerary from '../components/addToItinerary'
@@ -138,7 +159,7 @@ export default {
             more: true,
             keywords: '',
             keywordsValues: [],
-            sortBy: '',
+            sortBy: 'name',
             showLessCategories: true,
             showLessKeywords: true,
             publicPath: '/images/',
@@ -163,9 +184,10 @@ export default {
             let app = this;
             axios.get(`/api/getAttractions/${app.$route.query.destination}`)
                 .then(response => {
-                    let attractionData = response.data.data;
+                    // let attractionData = response.data.data;
+                    app.attractions = response.data.data;
                     // console.log('attractions:',attractionData);
-                    app.attractions = attractionData.slice(0, 6);
+                    // app.attractions = attractionData.slice(0, 6);
                 })
                 .catch(function(error) {
                     console.log(error);

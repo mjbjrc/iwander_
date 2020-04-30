@@ -1,85 +1,124 @@
 <template>
-<div class="container">
-    <div class="row">
-        <div class="col-12">
-          <div class="row" style="margin-top: 200px;">
-            <div class="col-lg-4 order-2">
-                <div class="justify-content-center text-center avatar">
-                    <img v-if="user.image === 'image.jpg'" class="img-fluid" :src="publicPath + user.image" />
-                    <img v-else class="img-fluid " :src="storagePath + user.image" />
-                </div>
-                <div class="profile-deets">
-                    <p>{{user.name}}</p>
-                    <p>{{user.email}}</p>
-                </div>
-                <div class="col-12 section-button mt-2">
-                    <button type="submit" class="btn btn-primary" @click="showModal" id="show_modal">Change Avatar</button>
-                </div>
-            </div>
+    <div class="container">
+        <div class="body-content">
+            <div class="row">
 
-            <div class="col-lg-6 offset-lg-1 order-lg-2">
-                <b-tabs content-class="mt-3" fill pills>
-                    <b-tab title="ITINERARIES">
-                        <div v-for="(itinerary, index) in itineraries">
-                            <router-link :to="{ name: 'itinerary', params: {itinerary_id: itinerary.id} }">{{days[index]}} trip in {{itinerary.destination}}</router-link>
-                            <button type="button" class="btn btn-primary float-right" @click="deleteItinerary(itinerary.id)">DELETE</button>
-                            <p class="mt-2">
-                                {{itinerary.start_date}} to {{itinerary.end_date}}
-                            </p>
-                            <hr />
-                        </div>
-                        <div class="mb-3" v-if="noItineraries">
-                            <div class="row">
-                                <div class="col-md-12 mt-2">
-                                    <h3>{{this.imessage}}</h3>
+                <div class="col-12">
+                    <div class="row">
+
+                        <div class="col-lg-4">
+                            <div class="profile-info">
+
+                                <div class="avatar">
+                                    <img v-if="user.image === 'image.jpg'" class="img-fluid" :src="publicPath + user.image" />
+                                    <img v-else class="img-fluid " :src="storagePath + user.image" />
+                                </div>
+
+                                <h5>{{ user.name }}</h5>
+                                <p>{{ user.email }}</p>
+
+                                <div class="profile-info-buttons">
+                                    <button class="btn btn-secondary-xs" @click="showModal" id="show_modal">Edit Avatar</button>
+                                    <router-link to="/edit-profile">
+                                        <button class="btn btn-primary-xs">Edit Profile</button>
+                                    </router-link>
                                 </div>
                             </div>
                         </div>
-                    </b-tab>
-                    <b-tab title="BOOKMARKS">
-                        <div v-for="bookmark in bookmarks">
-                            <div v-if="bookmark.key === 0">
-                                <router-link :to="{ name: 'restaurant', params: {res_id: bookmark.restaurants.id} }">
-                                    {{bookmark.restaurants.name}}
-                                </router-link>
-                                <button type="button" class="btn btn-primary float-right" @click="deleteBookmark(bookmark.bookmark_id)">DELETE</button>
-                                <p class="mt-2">
-                                    {{bookmark.restaurants.location.locality_verbose}}
-                                </p>
-                            </div>
-                            <div v-else-if="bookmark.key === 1">
-                                <router-link :to="{ name: 'attraction', params: {att_id: bookmark.attractions.id} }">{{bookmark.attractions.name}}</router-link>
-                                <button type="button" class="btn btn-primary float-right" @click="deleteBookmark(bookmark.bookmark_id)">DELETE</button>
-                                <p class="mt-2">
-                                    {{bookmark.attractions.addresses.address1}}, {{bookmark.attractions.addresses.city.name}}
-                                </p>
-                            </div>
-                            <div v-else-if="bookmark.key === 2">
-                                <router-link :to="{ name: 'itinerary', params: {itinerary_id: bookmark.itineraries.id} }">Itinerary: Trip to {{bookmark.itineraries.destination}}</router-link>
-                                <button type="button" class="btn btn-primary float-right" @click="deleteBookmark(bookmark.bookmark_id)">DELETE</button>
-                                <p class="mt-2">
-                                    By {{bookmark.itineraries.user.name}}
-                                </p>
-                            </div>
-                            <hr />
 
+                        <div class="col-lg-7 offset-lg-1">
+                            <b-tabs fill pills>
+
+                                <b-tab title="Itineraries">
+                                    <div v-for="(itinerary, index) in itineraries" style="position: relative;">
+                                        <router-link :to="{ name: 'itinerary', params: {itinerary_id: itinerary.id} }">
+                                            <h5>{{days[index]}} in {{itinerary.destination}}</h5>
+                                        </router-link>
+
+                                        <button type="button" @click="deleteItinerary(itinerary.id)">
+                                            <jam-close/>
+                                        </button>
+
+                                        <p>
+                                            {{itinerary.start_date}} to {{itinerary.end_date}}
+                                        </p>
+                                        <hr />
+                                    </div>
+
+                                    <div v-if="noItineraries">
+                                        <h5>{{ this.imessage }}</h5>
+                                    </div>
+                                </b-tab>
+
+                                <b-tab title="Bookmarks">
+                                    <div v-for="bookmark in bookmarks">
+
+                                      <!-- bookmarked restaurant -->
+                                        <div v-if="bookmark.key === 0">
+                                            <router-link :to="{ name: 'restaurant', params: {res_id: bookmark.restaurants.id} }">
+                                                <h5>{{bookmark.restaurants.name}}</h5>
+                                            </router-link>
+                                            <span @click="deleteBookmark(bookmark.bookmark_id)" class="float-right"><jam-close/></span>
+                                            <!-- <button type="button" @click="deleteBookmark(bookmark.bookmark_id)"  class="float-right">
+                                                <jam-close/>
+                                            </button>asdasd -->
+
+                                            <p>
+                                                {{bookmark.restaurants.location.locality_verbose}}
+                                            </p>
+                                        </div>
+
+                                          <!-- bookmarked attraction -->
+                                        <div v-else-if="bookmark.key === 1">
+                                            <router-link :to="{ name: 'attraction', params: {att_id: bookmark.attractions.id} }">
+                                                <h5>{{bookmark.attractions.name}}</h5>
+                                            </router-link>
+
+                                            <span type="button" @click="deleteBookmark(bookmark.bookmark_id)" class="float-right">
+                                                <jam-close/>
+                                            </span>
+
+                                            <p>
+                                                {{bookmark.attractions.addresses.address1}}, {{bookmark.attractions.addresses.city.name}}
+                                            </p>
+                                        </div>
+
+                                          <!-- bookmarked itinerary -->
+                                        <div v-else-if="bookmark.key === 2">
+                                            <router-link :to="{ name: 'itinerary', params: {itinerary_id: bookmark.itineraries.id} }">
+                                                <h5>Itinerary: Trip to {{bookmark.itineraries.destination}}</h5>
+                                            </router-link>
+
+                                            <span type="button" @click="deleteBookmark(bookmark.bookmark_id)"  class="float-right">
+                                                <jam-close/>
+                                            </span>
+
+                                            <p>
+                                                By {{bookmark.itineraries.user.name}}
+                                            </p>
+                                        </div>
+
+                                        <hr />
+                                    </div>
+
+                                    <div v-if="noBookmarks">
+                                        <h5>{{this.bmessage}}</h5>
+                                    </div>
+                                </b-tab>
+
+                            </b-tabs>
                         </div>
-                        <div class="mb-3 body-content" v-if="noBookmarks">
-                            <div class="row">
-                                <div class="col-md-12 mt-2">
-                                    <h3>{{this.bmessage}}</h3>
-                                </div>
-                            </div>
-                        </div>
-                    </b-tab>
-                </b-tabs>
+
+                    </div>
+                </div>
+
+                <editprofile v-if="show_modal" @submit="show_modal = false" @close="hide()"> </editprofile>
+
             </div>
-            <editprofile v-if="show_modal" @submit="show_modal = false" @close="hide()"> </editprofile>
-          </div>
         </div>
     </div>
-</div>
 </template>
+
 <script>
 import editprofile from '../components/editprofile'
 var moment = require('moment');
@@ -147,7 +186,7 @@ export default {
                 .then(response => {
                     if (response.data.data == "") {
                         console.log("NO BOOKMARKS");
-                        app.bmessage = "You have no bookmarks!"
+                        app.bmessage = "You have no bookmarks."
                         app.noBookmarks = true;
                     } else {
                         let results = response.data.data;
@@ -236,7 +275,7 @@ export default {
                 .then(response => {
                     if (response.data.data == "") {
                         console.log("NO ITINERARIES");
-                        app.imessage = "You have not created any itineraries!";
+                        app.imessage = "You have not created any itineraries.";
                         app.noItineraries = true;
                     } else {
                         let results = response.data.data;
@@ -297,22 +336,9 @@ export default {
     }
 }
 </script>
+
 <style scoped>
-.profile-deets {
-    font-family: "Poppins";
-    text-align: center;
-    align-content: center;
-}
-
-.editbtn {
-    color: white;
-    margin-top: 30px;
-    margin-bottom: 30px;
-}
-
-.avatar {
-    border-radius: 50%;
-    margin: 40px 0px;
-}
-
+    a:hover {
+        text-decoration: none;
+    }
 </style>

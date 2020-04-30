@@ -1,121 +1,138 @@
 <template>
-<div>
-    <itinerarybuilderNav @save="save()" :saveItinerary="true"></itinerarybuilderNav>
-    <div class="jumbotron jumbotron-fluid itinerary-banner">
-        <div class="container">
-            <h2>{{this.$route.query.duration}} in {{this.$route.query.destination}}</h2>
-            <p>{{moment(itinerary.start_date).format('Do MMMM YYYY')}} &mdash; {{moment(itinerary.end_date).format('Do MMMM YYYY')}}</p>
+    <div>
+
+        <itinerarybuilderNav @save="save()" :saveItinerary="true"></itinerarybuilderNav>
+
+        <div class="jumbotron jumbotron-fluid itinerary-banner">
+            <div class="container">
+                <h2>{{this.$route.query.duration}} in {{this.$route.query.destination}}</h2>
+                <p>{{moment(itinerary.start_date).format('Do MMMM YYYY')}} &mdash; {{moment(itinerary.end_date).format('Do MMMM YYYY')}}</p>
+            </div>
         </div>
-    </div>
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <div class="row">
-                    <div class="col-lg-3 col-md-3">
-                        <div class="date-selection">
-                            <ul class="list-group" v-for="date in dates">
-                                <li class="list-group-item">
-                                    <a class="btn date-selection-link" @click="setDate(date.numFormat)" role="button"> {{date.textFormat}} </a>
-                                </li>
-                            </ul>
+
+        <div class="container">
+            <div class="row">
+
+                <div class="col-12">
+                    <div class="row">
+
+                        <div class="col-lg-3 col-md-3">
+                            <div class="date-selection">
+                                <ul class="list-group" v-for="date in dates">
+
+                                    <li class="list-group-item">
+                                        <a class="btn date-selection-link" @click="setDate(date.numFormat)" role="button"> {{date.textFormat}} </a>
+                                    </li>
+
+                                </ul>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-lg-8 offset-lg-1 col-md-8 offset-md-1">
-                        <div class="row items-index">
-                          <div class="col-12" v-if="noEvent">
-                              <h6>{{message}}</h6>
-                          </div>
-                            <div v-else class="col-12">
-                                <div class="card-c" v-if="showFD" v-for="plan in FDsortByTime" :key="plan.id">
-                                    <div class="card-c-img" v-if="plan.attraction === null">
-                                        <img :src="plan.restaurants.featured_image" alt="Card image">
-                                    </div>
-                                    <div class="card-c-img" v-else>
-                                      <img v-if="plan.attraction.details.image === 'default-image.png'" class="img-fluid" :src="publicPath + plan.attraction.details.image" :img-alt="plan.attraction.name" />
-                                      <img class="img-fluid" :src="storagePath + plan.attraction.details.image" :img-alt="plan.attraction.name" />
+
+                        <div class="col-lg-8 offset-lg-1 col-md-8 offset-md-1">
+                            <div class="row items-index">
+
+                            <div class="col-12" v-if="noEvent">
+                                <h6>{{message}}</h6>
+                            </div>
+
+                                <div v-else class="col-12">
+                                    <div class="card-c" v-if="showFD" v-for="plan in FDsortByTime" :key="plan.id">
+                                        <div class="card-c-img" v-if="plan.attraction === null">
+                                            <img :src="plan.restaurants.featured_image" alt="Card image">
+                                        </div>
+
+                                        <div class="card-c-img" v-else>
+                                        <img v-if="plan.attraction.details.image === 'default-image.png'" class="img-fluid" :src="publicPath + plan.attraction.details.image" :img-alt="plan.attraction.name" />
+                                        <img class="img-fluid" :src="storagePath + plan.attraction.details.image" :img-alt="plan.attraction.name" />
+                                        </div>
+
+                                        <div class="card-c-body">
+                                            <div v-if="plan.attraction === null">
+                                                <a>
+                                                    <router-link :to="{ name: 'restaurant', params: {res_id: plan.restaurants.id}}" target="_blank">
+                                                        <h6>{{plan.restaurants.name}}</h6>
+                                                    </router-link>
+                                                </a>
+                                                <p class="address">{{plan.restaurants.location.address}}</p>
+                                            </div>
+
+                                            <div v-else>
+                                                <a>
+                                                    <router-link :to="{ name: 'attraction', params: {att_id: plan.attraction.id} }" target="_blank">
+                                                        <h6>{{plan.attraction.name}}</h6>
+                                                    </router-link>
+                                                </a>
+                                                <p class="address">
+                                                    {{plan.attraction.addresses.address1}}, {{plan.attraction.addresses.city.name}}, {{plan.attraction.addresses.city.districts.name}}
+                                                </p>
+                                            </div>
+
+                                            <span class="card-c-button">
+                                                <p>{{moment(plan.start_time, "HH:mm:ss").format('HH:mm')}} to {{moment(plan.end_time, "HH:mm:ss").format('HH:mm')}}</p>
+                                                <a class="edit" @click="showModal(plan.event_id)">
+                                                    Edit
+                                                </a>
+                                                <a class="delete" @click="deleteEvent(0, plan.event_id)">
+                                                    Delete
+                                                </a>
+                                            </span>
+                                        </div>
                                     </div>
 
-                                    <div class="card-c-body">
-                                        <div v-if="plan.attraction === null">
-                                            <a>
-                                                <router-link :to="{ name: 'restaurant', params: {res_id: plan.restaurants.id}}" target="_blank">
-                                                    <h6>{{plan.restaurants.name}}</h6>
-                                                </router-link>
-                                            </a>
-                                            <p class="address">{{plan.restaurants.location.address}}</p>
+                                    <div class="card-c" v-if="show" v-for="plan in sortByTime" :key="plan.id">
+                                        <div class="card-c-img" v-if="plan.attraction === null">
+                                            <img :src="plan.restaurants.featured_image" alt="Card image">
                                         </div>
-                                        <div v-else>
-                                            <a>
-                                                <router-link :to="{ name: 'attraction', params: {att_id: plan.attraction.id} }" target="_blank">
-                                                    <h6>{{plan.attraction.name}}</h6>
-                                                </router-link>
-                                            </a>
-                                            <p class="address">{{plan.attraction.addresses.address1}}, {{plan.attraction.addresses.city.name}}, {{plan.attraction.addresses.city.districts.name}}
 
-                                            </p>
+                                        <div class="card-c-img" v-else>
+                                                <img v-if="plan.attraction.details.image === 'default-image.png'" class="img-fluid" :src="publicPath + plan.attraction.details.image" :img-alt="plan.attraction.name" />
+                                                <img class="img-fluid" :src="storagePath + plan.attraction.details.image" :img-alt="plan.attraction.name" />
                                         </div>
-                                        <span>
-                                            <p>{{plan.start_time}} to {{plan.end_time}}</p>
-                                        </span>
-                                        <span class="card-c-button">
-                                            <a class="edit" @click="showModal(plan.event_id)">
-                                                Edit
-                                            </a>
-                                            <a class="delete" @click="deleteEvent(0, plan.event_id)">
-                                                Delete
-                                            </a>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="card-c" v-if="show" v-for="plan in sortByTime" :key="plan.id">
-                                    <div class="card-c-img" v-if="plan.attraction === null">
-                                        <img :src="plan.restaurants.featured_image" alt="Card image">
-                                    </div>
-                                    <div class="card-c-img" v-else>
-                                              <img v-if="plan.attraction.details.image === 'default-image.png'" class="img-fluid" :src="publicPath + plan.attraction.details.image" :img-alt="plan.attraction.name" />
-                                              <img class="img-fluid" :src="storagePath + plan.attraction.details.image" :img-alt="plan.attraction.name" />
-                                    </div>
 
-                                    <div class="card-c-body">
-                                        <div v-if="plan.attraction === null">
-                                            <a>
-                                                <router-link :to="{ name: 'restaurant', params: {res_id: plan.restaurants.id}}" target="_blank">
-                                                    <h6>{{plan.restaurants.name}}</h6>
-                                                </router-link>
-                                            </a>
-                                            <p class="address">{{plan.restaurants.location.address}}</p>
+                                        <div class="card-c-body">
+                                            <div v-if="plan.attraction === null">
+                                                <a>
+                                                    <router-link :to="{ name: 'restaurant', params: {res_id: plan.restaurants.id}}" target="_blank">
+                                                        <h6>{{plan.restaurants.name}}</h6>
+                                                    </router-link>
+                                                </a>
+                                                <p class="address">{{plan.restaurants.location.address}}</p>
+                                            </div>
+
+                                            <div v-else>
+                                                <a>
+                                                    <router-link :to="{ name: 'attraction', params: {att_id: plan.attraction.id} }" target="_blank">
+                                                        <h6>{{plan.attraction.name}}</h6>
+                                                    </router-link>
+                                                </a>
+                                                <p class="address">{{plan.attraction.addresses.address1}}, {{plan.attraction.addresses.city.name}}, {{plan.attraction.addresses.city.districts.name}}
+                                                </p>
+                                            </div>
+
+                                            <span class="card-c-button">
+                                                <p>{{moment(plan.start_time, "HH:mm:ss").format('HH:mm')}} to {{moment(plan.end_time, "HH:mm:ss").format('HH:mm')}}</p>
+                                                <a class="edit" @click="showModal(plan.event_id)">
+                                                    Edit
+                                                </a>
+                                                <a class="delete" @click="deleteEvent(1, plan.event_id)">
+                                                    Delete
+                                                </a>
+                                            </span>
                                         </div>
-                                        <div v-else>
-                                            <a>
-                                                <router-link :to="{ name: 'attraction', params: {att_id: plan.attraction.id} }" target="_blank">
-                                                    <h6>{{plan.attraction.name}}</h6>
-                                                </router-link>
-                                            </a>
-                                            <p class="address">{{plan.attraction.addresses.address1}}, {{plan.attraction.addresses.city.name}}, {{plan.attraction.addresses.city.districts.name}}
-                                            </p>
-                                        </div>
-                                        <span>
-                                            <p>{{plan.start_time}} to {{plan.end_time}}</p>
-                                        </span>
-                                        <span class="card-c-button">
-                                            <a class="edit" @click="showModal(plan.event_id)">
-                                                Edit
-                                            </a>
-                                            <a class="delete" @click="deleteEvent(1, plan.event_id)">
-                                                Delete
-                                            </a>
-                                        </span>
                                     </div>
                                 </div>
                             </div>
+
+                            <editEvent v-if="show_modal" @submit="hide()" @close="show_modal = false" :event_id="this.event_id"> </editEvent>
                         </div>
-                        <editEvent v-if="show_modal" @submit="hide()" @close="show_modal = false" :event_id="this.event_id"> </editEvent>
+
                     </div>
                 </div>
+
             </div>
         </div>
+
     </div>
-</div>
 </template>
 <script>
 var moment = require('moment');
@@ -434,9 +451,10 @@ export default {
 
 }
 </script>
+
 <style>
-.days {
-    padding: 15px;
-    border: 2px solid black;
-}
+    .days {
+        padding: 15px;
+        border: 2px solid black;
+    }
 </style>

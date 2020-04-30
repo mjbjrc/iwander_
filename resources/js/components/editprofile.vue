@@ -6,7 +6,7 @@
                   <div class="modal-body">
                       <div class="col-12">
                           <div class="modal-form-heading">
-                              <h4>Edit Profile</h4>
+                              <h4>Edit Avatar</h4>
 
                           </div>
                       </div>

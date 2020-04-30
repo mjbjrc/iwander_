@@ -42,18 +42,16 @@
                             <router-link to="/sign-in" class="last-nav-link" v-if="isLoggedin === false">Sign In</router-link>
                           </li>
 
-                          <li class="nav-item dropdown" v-if="isLoggedin === true">
-                            <a id="navbarDropdown" class="nav-link dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                              My Account<span class="caret"></span>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                  <router-link to="/my-profile" class="dropdown-item">My Profile</router-link>
-                                  <router-link to="/edit-profile" class="dropdown-item">Settings</router-link>
-                                  <div class="dropdown-divider"></div>
-                                  <a class="dropdown-item" @click="logout">
-                                      Logout
-                                  </a>
-                            </div>
+                          <li class="nav-item">
+                            <router-link to="/my-profile" class="nav-link" v-if="isLoggedin === true">Profile</router-link>
+                          </li>
+
+                          <li class="nav-item">
+                            <router-link to="/edit-profile" class="nav-link" v-if="isLoggedin === true">Settings</router-link>
+                          </li>
+
+                          <li class="nav-item">
+                            <a @click="logout" class="last-nav-link" v-if="isLoggedin === true">Sign Out</a>
                           </li>
                       </ul>
                   </div>
@@ -81,7 +79,7 @@ import autocomplete from './autocomplete'
       isLoggedin: function(newVal, oldVal){
         immediate: true,
         this.checkIfLoggedIn();
-        // console.log('prop changed: ', newVal, '| was: ', oldVal); 
+        // console.log('prop changed: ', newVal, '| was: ', oldVal);
       }
     },
     created(){

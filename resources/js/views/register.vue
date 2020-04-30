@@ -1,69 +1,51 @@
 
 <template>
-<div class="container">
-    <div class="body-content">
-        <div class="row justify-content-center">
-            <div class="col-lg-5 col-md-8 sign-in">
-                <h2 class="text-center h2-text">Sign Up</h2>
-                <p class="text-center mt-3">
-                    Already have an account? <a>
-                        <router-link to="/sign-in">Sign In</router-link>
-                    </a>
-                </p>
-                <hr />
-                <form v-on:submit.prevent="register">
-                    <div class="form-group row justify-content-center">
-                        <div class="col-md-9">
-                            <label for="name">Name</label>
-                            <input id="name" type="text" v-model="name" class="form-control" name="name" autocomplete="name">
-                            <span class="errors">{{ getErrors('name') }}</span>
-                        </div>
+    <div class="container">
+        <div class="body-content">
+            <div class="row">
+                <div class="col-lg-4 offset-lg-4 col-sm-12">
+                    <div class="auth-form-heading">
+                        <h2>Sign Up</h2>
+                        <p>Already have an account? <router-link to="/sign-in">Sign In</router-link></p>
                     </div>
 
-                    <div class="form-group row justify-content-center">
-                        <div class="col-md-9">
-                            <label for="email">Email Address</label>
-                            <input id="email" type="email" v-model="email" class="form-control" name="email" required autocomplete="email">
-                            <span class="errors">{{ getErrors('email') }}</span>
-                        </div>
-                    </div>
+                    <form v-on:submit.prevent="register">
+                        <div class="row">
+                            <div class="form-group col-12">
+                                <label for="name">Full Name</label>
+                                <input id="name" type="text" v-model="name" class="form-control" name="name" autocomplete="name">
+                                <span class="errors">{{ getErrors('name') }}</span>
+                            </div>
 
-                    <div class="form-group row justify-content-center">
-                        <div class="col-md-9">
-                            <label for="password">Password</label>
-                            <input id="password" type="password" v-model="password" class="form-control" name="password" required autocomplete="new-password">
-                              <span class="errors">{{ getErrors('password') }}</span>
-                        </div>
-                    </div>
+                            <div class="form-group col-12">
+                                <label for="email">Email Address</label>
+                                <input id="email" type="email" v-model="email" class="form-control" name="email"  autocomplete="email">
+                                <span class="errors">{{ getErrors('email') }}</span>
+                            </div>
 
-                    <div class="form-group row justify-content-center">
-                        <div class="col-md-9">
-                            <label for="password_confirmation">Confirm password</label>
-                            <input id="password_confirmation" v-model="password_confirmation" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
-                              <span class="errors">{{ getErrors('passwordConfirmation') }}</span>
-                        </div>
-                    </div>
+                            <div class="form-group col-12">
+                                <label for="password">Password</label>
+                                <input id="password" type="password" v-model="password" class="form-control" name="password"  autocomplete="new-password">
+                                <span class="errors">{{ getErrors('password') }}</span>
+                            </div>
 
-                    <div class="form-group row justify-content-center ">
-                        <div class="col-md-8 text-center mt-2">
-                            <p>
-                                By clicking Sign up, I agree to iWander's <a href="#">Terms & Conditions</a> and <a href="#">Privacy Policy</a>.
-                            </p>
-                        </div>
-                    </div>
+                            <div class="form-group col-12">
+                                <label for="password_confirmation">Confirm password</label>
+                                <input id="password_confirmation" v-model="password_confirmation" type="password" class="form-control" name="password_confirmation"  autocomplete="new-password">
+                                <span class="errors">{{ getErrors('passwordConfirmation') }}</span>
+                            </div>
 
-                    <div class="form-group row justify-content-center">
-                        <div class="col-md-8 text-center">
-                            <button type="submit" class="btn btn-primary buttons">
-                                Register
-                            </button>
+                            <div class="form-button col-12">
+                                <button type="submit" class="btn btn-primary">
+                                    Sign Up
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
 </template>
 
 <script>

@@ -1,13 +1,13 @@
 <template>
 <div>
     <!---------- ITEM BANNER ---------->
-    <div class="jumbotron jumbotron-fluid item-banner">
+    <div class="jumbotron jumbotron-fluid item-banner" v-if="attractionLoaded">
         <img v-if="attraction.details.image === 'default-image.png'" :src="publicPath + attraction.details.image" />
         <img v-else :src="storagePath + attraction.details.image" />
     </div>
 
     <!---------- CONTENT START ---------->
-    <div class="container">
+    <div class="container" v-if="attractionLoaded">
         <div class="row">
             <div class="col-12">
                 <div class="row">
@@ -135,7 +135,7 @@
                 <div class="col-12">
                     <div class="row">
 
-                        <div  v-if="isLoaded" class="col-12 col-lg-4 col-md-6" v-for="attraction in uniqueAttractions.slice(0,6)" :key="attraction.id">
+                        <div v-if="isLoaded" class="col-12 col-lg-4 col-md-6" v-for="attraction in uniqueAttractions.slice(0,6)" :key="attraction.id">
                             <div class="card-b">
                                 <!-- CARD BUTTONS -->
                                 <div class="card-buttons">
@@ -199,7 +199,8 @@ export default {
             storagePath: '../storage/images/',
             businessHours: [],
             categories_name: [],
-            isLoaded: false
+            isLoaded: false,
+            attractionLoaded: false
         }
     },
     watch: {
@@ -218,7 +219,7 @@ export default {
     mounted() {
         this.getAttraction();
         this.getCategory();
-        this.getSimilarAttractions();
+        // this.getSimilarAttractions();
     },
     methods: {
         getAttraction() {
@@ -228,7 +229,7 @@ export default {
                 .then(response => {
                     app.attraction = response.data.data;
                     app.businessHours = response.data.hours;
-
+                    app.attractionLoaded = true;
                     // console.log('attraction:',attractionData);
                 })
                 .catch(function(error) {
@@ -327,8 +328,8 @@ export default {
                                     similarAttraction: res,
                                     attraction_category: categ
                                 });
-                                //shuffle the array
-                                app.similarAttractions = _.shuffle(app.similarAttractions);
+                                // app.similarAttractions = _.shuffle(app.similarAttractions);
+                                // app.similarAttractions = _.uniqBy(this.similarAttractions, 'id');
                             })
                             .catch(function(error) {
                                 console.log(error);

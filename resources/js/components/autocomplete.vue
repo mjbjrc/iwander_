@@ -2,7 +2,7 @@
  <div>
    <div class="input-group">
      <span class="lnr lnr-magnifier" ></span>
-     <input type="text" v-model="search" placeholder="Search for a city" v-on:keyup="getSearchData" class="form-control" style="margin-left: 28px;"></input>
+     <input type="text" v-model="search" placeholder="Search cities" v-on:keyup="getSearchData" class="form-control" style="margin-left: 15px;"></input>
    </div>
 
  <div class="dropdown-results" v-if="results.length">

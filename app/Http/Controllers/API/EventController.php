@@ -13,6 +13,7 @@ class EventController extends Controller
   //create an event
   public function create(Request $request){
     $validator = Validator::make($request->all(), [
+        'itinerary_id' => 'required|integer',
         'restaurant_id' => 'integer',
         'attraction_id' => 'integer',
         'start_time' => 'required|date_format:H:i',

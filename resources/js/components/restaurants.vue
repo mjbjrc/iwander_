@@ -1,99 +1,117 @@
 <template>
-<div class="container">
-    <div class="row">
-        <div class="col-lg-3 col-md-3 filters-col d-none d-md-block d-lg-block">
-            <div class="filters-block">
-                <h6>Establishments:</h6>
-                <ul class="list-group filter-selection">
-                    <div v-if="showLessEstablishments">
-                        <li class="list-group-item" v-for="establishment in LessEstablishments">
-                            <input type="checkbox" id="establishmentCheckbox" :value="establishment.establishment.id" v-model="establishmentValues">
-                            <label for="establishmentCheckbox">{{establishment.establishment.name}}</label>
-                        </li>
-                    </div>
-                    <div v-else>
-                        <li class="list-group-item" v-for="establishment in MoreEstablishments">
-                            <input type="checkbox" id="establishmentCheckbox" :value="establishment.establishment.id" v-model="establishmentValues">
-                            <label for="establishmentCheckbox">{{establishment.establishment.name}}</label>
-                        </li>
-                    </div>
-                    <a v-if="showLessEstablishments" @click="showLessEstablishments = false">Show More</a>
-                    <a v-else @click="showLessEstablishments = true">Show Less</a>
-                </ul>
-            </div>
-            <div class="filters-block">
-                <h6>Categories:</h6>
-                <ul class="list-group filter-selection">
-                    <div v-if="showLessCategories">
-                        <li class="list-group-item" v-for="category in LessCategories">
-                            <input type="checkbox" id="categoryCheckbox" :value="category.categories.id" v-model="categoryValues">
-                            <label for="categoryCheckbox">{{category.categories.name}}</label>
-                        </li>
-                    </div>
-                    <div v-else>
-                        <li class="list-group-item" v-for="category in MoreCategories">
-                            <input type="checkbox" id="categoryCheckbox" :value="category.categories.id" v-model="categoryValues">
-                            <label for="categoryCheckbox">{{category.categories.name}}</label>
-                        </li>
-                    </div>
-                    <a v-if="showLessCategories" @click="showLessCategories = false">Show More</a>
-                    <a v-else @click="showLessCategories = true">Show Less</a>
-                </ul>
-            </div>
-            <div class="filters-block">
-                <h6>Categories:</h6>
-                <ul class="list-group filter-selection">
-                    <div v-if="showLessCuisines">
-                        <li class="list-group-item" v-for="cuisine in LessCuisines">
-                            <input type="checkbox" id="cuisineCheckbox" :value="cuisine.cuisine.cuisine_id" v-model="cuisineValues">
-                            <label for="cuisineCheckbox">{{cuisine.cuisine.cuisine_name}}</label>
-                        </li>
-                    </div>
-                    <div v-else>
-                        <li class="list-group-item" v-for="cuisine in MoreCuisines">
-                            <input type="checkbox" id="cuisineCheckbox" :value="cuisine.cuisine.cuisine_id" v-model="cuisineValues">
-                            <label for="cuisineCheckbox">{{cuisine.cuisine.cuisine_name}}</label>
-                        </li>
-                    </div>
-                    <a v-if="showLessCuisines" @click="showLessCuisines = false">Show More</a>
-                    <a v-else @click="showLessCuisines = true">Show Less</a>
-                </ul>
-            </div>
-            <div class="filters-button">
-                <button type="button" class="btn-secondary-sm" @click="filter">Apply</button>
-            </div>
-        </div>
-        <div class="col-lg-8 offset-lg-1 col-md-8 offset-md-1">
+    <div class="container">
+        <div class="row">
 
-            <div class="row items-index">
-                <div class="col-12">
-                    <div class="card-c" v-for="result in uniqueRestaurants" :key="result.restaurant.id">
-                        <div class="card-c-img">
-                            <img :src="result.restaurant.featured_image" alt="Card image">
+            <div class="col-12">
+                <div class="row">
+
+                    <div class="col-lg-3 col-md-3 filters-col d-none d-md-block d-lg-block">
+                        <div class="filters-block">
+                            <h6>Establishments</h6>
+
+                            <ul class="list-group filter-selection">
+                                <div v-if="showLessEstablishments">
+                                    <li class="list-group-item" v-for="establishment in LessEstablishments">
+                                        <input type="checkbox" id="establishmentCheckbox" :value="establishment.establishment.id" v-model="establishmentValues">
+                                        <label for="establishmentCheckbox">{{establishment.establishment.name}}</label>
+                                    </li>
+                                </div>
+                                <div v-else>
+                                    <li class="list-group-item" v-for="establishment in MoreEstablishments">
+                                        <input type="checkbox" id="establishmentCheckbox" :value="establishment.establishment.id" v-model="establishmentValues">
+                                        <label for="establishmentCheckbox">{{establishment.establishment.name}}</label>
+                                    </li>
+                                </div>
+                                <a v-if="showLessEstablishments" @click="showLessEstablishments = false">Show More</a>
+                                <a v-else @click="showLessEstablishments = true">Show Less</a>
+                            </ul>
                         </div>
-                        <div class="card-c-body">
-                            <router-link :to="{ name: 'restaurant', params: {res_id: result.restaurant.id} }" target="_blank">
-                                <h6>{{result.restaurant.name}}</h6>
-                            </router-link>
-                            <p class="address">{{result.restaurant.location.address}}</p>
-                            <span class="card-c-button">
-                                <a class="add" @click="showModal(result.restaurant.id)" id="show_modal">
-                                    Add to Itinerary
-                                </a>
-                            </span>
+
+                        <div class="filters-block">
+                            <h6>Categories</h6>
+
+                            <ul class="list-group filter-selection">
+                                <div v-if="showLessCategories">
+                                    <li class="list-group-item" v-for="category in LessCategories">
+                                        <input type="checkbox" id="categoryCheckbox" :value="category.categories.id" v-model="categoryValues">
+                                        <label for="categoryCheckbox">{{category.categories.name}}</label>
+                                    </li>
+                                </div>
+                                <div v-else>
+                                    <li class="list-group-item" v-for="category in MoreCategories">
+                                        <input type="checkbox" id="categoryCheckbox" :value="category.categories.id" v-model="categoryValues">
+                                        <label for="categoryCheckbox">{{category.categories.name}}</label>
+                                    </li>
+                                </div>
+                                <a v-if="showLessCategories" @click="showLessCategories = false">Show More</a>
+                                <a v-else @click="showLessCategories = true">Show Less</a>
+                            </ul>
+                        </div>
+
+                        <div class="filters-block">
+                            <h6>Cuisines:</h6>
+                            <ul class="list-group filter-selection">
+                                <div v-if="showLessCuisines">
+                                    <li class="list-group-item" v-for="cuisine in LessCuisines">
+                                        <input type="checkbox" id="cuisineCheckbox" :value="cuisine.cuisine.cuisine_id" v-model="cuisineValues">
+                                        <label for="cuisineCheckbox">{{cuisine.cuisine.cuisine_name}}</label>
+                                    </li>
+                                </div>
+                                <div v-else>
+                                    <li class="list-group-item" v-for="cuisine in MoreCuisines">
+                                        <input type="checkbox" id="cuisineCheckbox" :value="cuisine.cuisine.cuisine_id" v-model="cuisineValues">
+                                        <label for="cuisineCheckbox">{{cuisine.cuisine.cuisine_name}}</label>
+                                    </li>
+                                </div>
+                                <a v-if="showLessCuisines" @click="showLessCuisines = false">Show More</a>
+                                <a v-else @click="showLessCuisines = true">Show Less</a>
+                            </ul>
+                        </div>
+
+                        <div class="filters-button">
+                            <button type="button" class="btn-secondary-sm" @click="filter">Apply</button>
                         </div>
                     </div>
+
+                    <div class="col-lg-8 offset-lg-1 col-md-8 offset-md-1">
+                        <div class="row items-index">
+
+                            <div class="col-12">
+                                <div class="card-c" v-for="result in uniqueRestaurants" :key="result.restaurant.id">
+                                    <div class="card-c-img">
+                                        <img :src="result.restaurant.featured_image" alt="Card image">
+                                    </div>
+
+                                    <div class="card-c-body">
+                                        <router-link :to="{ name: 'restaurant', params: {res_id: result.restaurant.id} }" target="_blank">
+                                            <h6>{{result.restaurant.name}}</h6>
+                                        </router-link>
+                                        <p class="address">{{result.restaurant.location.address}}</p>
+                                        <span class="card-c-button">
+                                            <a class="add" @click="showModal(result.restaurant.id)" id="show_modal">
+                                                Add to Itinerary
+                                            </a>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="items-index-button">
+                                <button class="btn btn-primary" @click="loadMore">Show More</button>
+                            </div>
+
+                            <addEvent v-if="show_modal" @close="show_modal = false" :data="this.res_id" :itinerary="this.itinerary"> </addEvent>
+
+                        </div>
+                    </div>
+
                 </div>
-                <addEvent v-if="show_modal" @close="show_modal = false" :data="this.res_id" :itinerary="this.itinerary"> </addEvent>
             </div>
-        </div>
 
+        </div>
     </div>
-    <div class="items-index-button">
-        <a class="btn btn-primary" @click="loadMore">Show More</a>
-    </div>
-</div>
 </template>
+
 <script>
 const ZomatoBASEURL = "https://developers.zomato.com/api/v2.1";
 const API_key = "223bdf4a4bffe3c07d3766b4be4efa5a";
@@ -358,6 +376,7 @@ export default {
     }
 }
 </script>
+
 <style>
 .lnr-plus-circle {
     color: black;

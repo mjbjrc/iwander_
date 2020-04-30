@@ -1,106 +1,107 @@
 <template>
-<div>
-    <div class="jumbotron jumbotron-fluid itinerary-banner">
-        <div class="container">
-            <h2>{{duration}} in {{itinerary.destination}}</h2>
-            <p>{{moment(itinerary.start_date).format('Do MMMM YYYY')}} &mdash; {{moment(itinerary.end_date).format('Do MMMM YYYY')}}</p>
-        </div>
-    </div>
-    <div class="container" style="margin-bottom: 100px;">
-        <div class="row">
-            <div class="col-12">
-                <div class="row">
-                    <div class="itinerary-info col-lg-3 col-md-3">
-                        <div class="action-selection">
-                            <div class="row" v-if="trueUser">
-                                <div class="col-6">
-                                    <router-link :to="{name: 'addtoitinerary', params: { destination: this.itinerary.destination}, query: {itinerary_id: this.itinerary.id} }">
-                                        <a class="btn action-selection-link" role="button">
-                                            <span data-jam="pencil" data-fill="#444" data-width="18" data-height="18"></span> Edit
-                                        </a>
-                                    </router-link>
-                                </div>
-
-                                <div class="col-6">
-                                    <a class="btn action-selection-link" href="#" role="button" @click="deleteItinerary(itinerary.id)">
-                                        <span data-jam="trash" data-fill="#444" data-width="18" data-height="18"></span> Delete
-                                    </a>
-                                </div>
-
-                                <div class="col-6">
-                                    <a class="btn action-selection-link" href="#" role="button" @click="addToBookmarks(itinerary.id)">
-                                        <span data-jam="heart" data-fill="#444" data-width="18" data-height="18"></span> Save
-                                    </a>
-                                </div>
-
-                                <div class="col-6">
-                                    <a class="btn action-selection-link" href="#" role="button" @click="print">
-                                        <span data-jam="printer" data-fill="#444" data-width="18" data-height="18"></span> Print
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="itinerary-info-select">
-                            <h6>Dates</h6>
-                            <form>
-                                <select class="custom-select" v-model="day" @change="getEvents">
-                                    <option disabled value="">Select Day</option>
-                                    <option :value="date.numFormat" v-for="date in dates">{{date.textFormat}}</option>
-                                </select>
-                            </form>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-8 offset-lg-1 col-md-8 offset-md-1" v-if="loaded">
-                        <div class="row items-index">
-                          <div class="col-12" v-if="noEvent">
-                              <h6>{{message}}</h6>
-                          </div>
-                            <div class="col-12" v-else v-for="plan in sortByTime">
-                                <div class="card-c">
-                                    <div class="card-c-img" v-if="plan.attraction === null">
-                                        <img :src="plan.restaurants.featured_image" alt="Card image">
-                                    </div>
-                                    <div class="card-c-img" v-else>
-                                      <img v-if="plan.attraction.details.image === 'default-image.png'" class="img-fluid" :src="publicPath + plan.attraction.details.image" :img-alt="plan.attraction.name" />
-                                      <img class="img-fluid" :src="storagePath + plan.attraction.details.image" :img-alt="plan.attraction.name" />
-                                    </div>
-                                    <div class="card-c-body">
-                                      <div v-if="plan.attraction === null">
-                                          <a>
-                                              <router-link :to="{ name: 'restaurant', params: {res_id: plan.restaurants.id}}" target="_blank">
-                                                  <h6>{{plan.restaurants.name}}</h6>
-                                              </router-link>
-                                          </a>
-                                          <p class="address">{{plan.restaurants.location.address}}</p>
-                                      </div>
-                                      <div v-else>
-                                          <a>
-                                              <router-link :to="{ name: 'attraction', params: {att_id: plan.attraction.id} }" target="_blank">
-                                                  <h6>{{plan.attraction.name}}</h6>
-                                              </router-link>
-                                          </a>
-                                          <p class="address">{{plan.attraction.addresses.address1}}, {{plan.attraction.addresses.city.name}}, {{plan.attraction.addresses.city.districts.name}}
-                                          </p>
-                                      </div>
-
-                                          <span class="event-details">
-                                              <p>{{plan.start_time}} to {{plan.end_time}}</p>
-                                          </span>
-                                      </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
+    <div>
+        <div class="jumbotron jumbotron-fluid itinerary-banner">
+            <div class="container">
+                <h2>{{duration}} in {{itinerary.destination}}</h2>
+                <p>{{moment(itinerary.start_date).format('Do MMMM YYYY')}} &mdash; {{moment(itinerary.end_date).format('Do MMMM YYYY')}}</p>
             </div>
         </div>
-        <alert v-if="show_alert" @close="show_alert = false" :alertMessage="alertMessage"> </alert>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="row">
+
+                        <div class="itinerary-info col-lg-3 col-md-3">
+
+                            <div class="action-selection">
+                                <div class="row" v-if="trueUser">
+
+                                    <div class="col-12">
+                                        <router-link :to="{name: 'addtoitinerary', params: { destination: this.itinerary.destination}, query: {itinerary_id: this.itinerary.id} }" class="btn action-selection-link">
+                                            <span class="jam jam-pencil" data-fill="#444" data-width="18" data-height="18"></span> Edit Itinerary
+                                        </router-link>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <a class="btn action-selection-link" href="#" role="button" @click="deleteItinerary(itinerary.id)">
+                                            <span class="jam jam-trash" data-fill="#444" data-width="18" data-height="18"></span> Delete Itinerary
+                                        </a>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <a class="btn action-selection-link" href="#" role="button" @click="addToBookmarks(itinerary.id)">
+                                            <span class="jam jam-heart" data-fill="#444" data-width="18" data-height="18"></span> Add to Bookmarks
+                                        </a>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="itinerary-info-select">
+                                <h6>Dates</h6>
+                                <form>
+                                    <select class="custom-select" v-model="day" @change="getEvents">
+                                        <option disabled value="">Select Day</option>
+                                        <option :value="date.numFormat" v-for="date in dates">{{date.textFormat}}</option>
+                                    </select>
+                                </form>
+                            </div>
+
+                        </div>
+
+                        <div class="col-lg-8 offset-lg-1 col-md-8 offset-md-1" v-if="loaded">
+                            <div class="row items-index">
+                            <div class="col-12" v-if="noEvent">
+                                <h6>{{message}}</h6>
+                            </div>
+                                <div class="col-12" v-else v-for="plan in sortByTime">
+                                    <div class="card-c">
+                                        <div class="card-c-img" v-if="plan.attraction === null">
+                                            <img :src="plan.restaurants.featured_image" alt="Card image">
+                                        </div>
+                                        <div class="card-c-img" v-else>
+                                        <img v-if="plan.attraction.details.image === 'default-image.png'" class="img-fluid" :src="publicPath + plan.attraction.details.image" :img-alt="plan.attraction.name" />
+                                        <img class="img-fluid" :src="storagePath + plan.attraction.details.image" :img-alt="plan.attraction.name" />
+                                        </div>
+                                        <div class="card-c-body">
+                                        <div v-if="plan.attraction === null">
+                                            <a>
+                                                <router-link :to="{ name: 'restaurant', params: {res_id: plan.restaurants.id}}" target="_blank">
+                                                    <h6>{{plan.restaurants.name}}</h6>
+                                                </router-link>
+                                            </a>
+                                            <p class="address">{{plan.restaurants.location.address}}</p>
+                                        </div>
+                                        <div v-else>
+                                            <a>
+                                                <router-link :to="{ name: 'attraction', params: {att_id: plan.attraction.id} }" target="_blank">
+                                                    <h6>{{plan.attraction.name}}</h6>
+                                                </router-link>
+                                            </a>
+                                            <p class="address">{{plan.attraction.addresses.address1}}, {{plan.attraction.addresses.city.name}}, {{plan.attraction.addresses.city.districts.name}}
+                                            </p>
+                                        </div>
+
+                                            <span class="event-details">
+                                                <p>{{moment(plan.start_time, "HH:mm:ss").format('HH:mm')}} to {{moment(plan.end_time, "HH:mm:ss").format('HH:mm')}}</p>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <alert v-if="show_alert" @close="show_alert = false" :alertMessage="alertMessage"> </alert>
+
+        </div>
     </div>
-</div>
 </template>
+
 <script>
 var moment = require('moment');
 import alert from '../components/alert'

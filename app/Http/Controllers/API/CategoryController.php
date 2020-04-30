@@ -34,7 +34,6 @@ class CategoryController extends Controller
           $categoriesData[] = $att;
         }
       }
-
       return response()->json(['data' => $categoriesData], 200);
     }
 

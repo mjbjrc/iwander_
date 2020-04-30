@@ -16,7 +16,7 @@
                         <div class="main-heading order-lg-1 order-sm-1">
                             <h1>{{results.name}}</h1>
                             <h6 class="subheading">
-                                <span class="jam jam-star-f" data-jam="star-f" data-fill="#2c8cd6" data-width="20" data-height="18"></span> {{results.user_rating.aggregate_rating}}
+                                <jam-star-f/> {{results.user_rating.aggregate_rating}}
                             </h6>
                             <h6 class="subheading" v-for="cuisine in results.cuisines.split(', ')">{{cuisine}}</h6>
                         </div>
@@ -26,8 +26,8 @@
 
                                 <div class="col-lg-6 col-sm-12">
                                     <div class="add-info">
-                                        <h6>Average Cost</h6>
-                                        <p>{{results.currency}} {{results.average_cost_for_two}}</p>
+                                        <h6>Average Cost For Two</h6>
+                                        <p>{{results.currency}}{{results.average_cost_for_two}}</p>
                                     </div>
                                 </div>
 
@@ -36,7 +36,7 @@
                                         <h6>Features</h6>
                                         <div v-if="lessHighlights">
                                             <ul class="list-inline">
-                                                <li class="list-inline-item"  v-for="highlight in showLessHighlights">{{highlight}}, </li>
+                                                <li class="list-inline-item"  v-for="highlight in showLessHighlights">{{highlight}}</li>
                                             </ul>
 
                                             <li class="list-inline-item" v-if="lessHighlights">
@@ -45,7 +45,7 @@
                                         </div>
                                         <div v-else>
                                             <ul class="list-inline" >
-                                                <li class="list-inline-item" v-for="highlight in showMoreHighlights">{{highlight}}, </li>
+                                                <li class="list-inline-item" v-for="highlight in showMoreHighlights">{{highlight}}</li>
 
                                             </ul>
                                             <li class="list-inline-item" v-if="!lessHighlights">
@@ -56,7 +56,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-lg-6 col-sm-12">
+                                <div class="col-lg-6 col-sm-12" v-if="results.timings !== ''">
                                     <div class="add-info">
                                         <h6>Hours</h6>
                                         <ul class="list-group">
@@ -103,6 +103,7 @@
         </div>
     </div>
         <addToItinerary v-if="show_modal" @submit="show_modal = false" @close="show_modal = false" :aOr="addToItineraryKey" :id="addToItineraryID"> </addToItinerary>
+        <alert v-if="show_alert" @close="show_alert = false" :alertMessage="alertMessage"> </alert>
 
 </div>
 </template>
@@ -117,6 +118,7 @@ const config = {
 };
 
 import addToItinerary from '../components/addToItinerary'
+import alert from '../components/alert'
 
 //get restaurant URL
 function getRestaurant(res_id) {
@@ -126,7 +128,7 @@ function getRestaurant(res_id) {
 export default {
     name: 'restaurant',
     components: {
-        addToItinerary
+        addToItinerary, alert
     },
     props: ['app', 'res_id', 'user'],
     data() {
@@ -136,6 +138,8 @@ export default {
             lessHighlights: true,
             highlights: "",
             show_modal: false,
+            alertMessage: "",
+            show_alert: false,
         }
     },
     mounted() {
@@ -146,9 +150,15 @@ export default {
             let app = this;
             axios.get(getRestaurant(query), config)
                 .then(function(response) {
-                    app.results = response.data;
+                  let restaurant = response.data;
 
-                    app.highlights = app.results.highlights;
+                  if (restaurant.featured_image == "") {
+                      let img = '/images/default-restaurant.jpg';
+                      restaurant.featured_image = img;
+                  }
+
+                  app.results = restaurant;
+                  app.highlights = app.results.highlights;
                 })
                 .catch(function(error) {
                     console.log(error);
@@ -208,6 +218,7 @@ export default {
     }
 }
 </script>
+
 <style>
 br {
     display: block;

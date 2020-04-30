@@ -198,5 +198,10 @@ export default {
     },
 }
 </script>
-<style>
+
+<style scoped>
+    .sorting-col .nav-link:active {
+        background-color: #2c8cd6;
+        color: #fff;
+    }
 </style>

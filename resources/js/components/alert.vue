@@ -6,7 +6,9 @@
 
                 <div class="modal-body">
                     <slot name="body">
-                      <button class="float-right" @click="$emit('close')">X</button>
+                      <button class="float-right" @click="$emit('close')">
+                        <jam-close/>
+                      </button>
                       <h4>{{this.alertMessage}}</h4>
                     </slot>
                 </div>
@@ -29,3 +31,11 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+    button {
+        background-color: transparent;
+        padding: 0px!important;
+        border: none!important;
+    }
+</style>
