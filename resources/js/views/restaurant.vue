@@ -1,5 +1,5 @@
 <template>
-<div>
+<div v-if="restaurantLoaded">
     <!---------- ITEM BANNER ---------->
     <div class="jumbotron jumbotron-fluid item-banner">
         <img :src="results.featured_image" />
@@ -140,6 +140,7 @@ export default {
             show_modal: false,
             alertMessage: "",
             show_alert: false,
+            restaurantLoaded: false
         }
     },
     mounted() {
@@ -159,6 +160,7 @@ export default {
 
                   app.results = restaurant;
                   app.highlights = app.results.highlights;
+                  app.restaurantLoaded = true;
                 })
                 .catch(function(error) {
                     console.log(error);
@@ -182,6 +184,8 @@ export default {
                     .then(response => {
                         console.log("RESTAURANT SUCCESSFULLY ADDED TO BOOKMARK");
                         // console.log(response.data);
+                        app.alertMessage = "Added to bookmarks!";
+                        app.show_alert = true;
                     })
                     .catch(function(error) {
                         console.log(error);
