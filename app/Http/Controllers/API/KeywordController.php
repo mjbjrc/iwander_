@@ -15,8 +15,9 @@ class KeywordController extends Controller
       return response()->json(['message' => 'Keywords Successfully Collected', 'data' => $keywords], 200);
     }
 
-    public function getAttractionsByKeywords($keywords){
+    public function getAttractionsByKeywords($keywords, $city){
       //if no keywords selected
+
       if($keywords == 0){
         //return null
         $attractionsData = null;
@@ -37,7 +38,10 @@ class KeywordController extends Controller
           $attractions = $key->attractions()->with('details','addresses','addresses.city','addresses.city.districts')->get();
           //store each attraction into the array
           foreach($attractions as $att){
-            $attractionsData[] = $att;
+            // dd($attractions);
+            if($att["addresses"]["city"]["name"] === $city){
+              $attractionsData[] = $att;
+            }
           }
         }
 

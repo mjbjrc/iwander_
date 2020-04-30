@@ -36,10 +36,10 @@ Route::get('get-cities/{country}', 'API\CountryController@getCitiesofCountry');
 
 Route::get('getCategories', 'API\CategoryController@getCategories');
 Route::get('getCategoriesOfAttraction/{id}', 'API\CategoryController@getCategoriesOfAttraction');
-Route::get('getAttractionsByCategories/{categories}', 'API\CategoryController@getAttractionsByCategories');
+Route::get('getAttractionsByCategories/{categories}/{city}', 'API\CategoryController@getAttractionsByCategories');
 
 Route::get('getAllKeywords', 'API\KeywordController@getAllKeywords');
-Route::get('getAttractionsByKeywords/{keywords}', 'API\KeywordController@getAttractionsByKeywords');
+Route::get('getAttractionsByKeywords/{keywords}/{city}', 'API\KeywordController@getAttractionsByKeywords');
 Route::get('getAttractionsByEvent/{iId}', 'API\AttractionController@getAttractionsByEvent');
 Route::get('getBusinessHours', 'API\AttractionController@getBusinessHours');
 

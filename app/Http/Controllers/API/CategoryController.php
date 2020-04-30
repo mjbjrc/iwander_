@@ -24,14 +24,17 @@ class CategoryController extends Controller
     }
 
     //get attractions by category
-    public function getAttractionsByCategories($categories){
+    public function getAttractionsByCategories($categories, $city){
+
       $ids = explode(",", $categories);
       $category = Category::whereIn('id', $ids)->get();
       $categoriesData = array();
       foreach($category as $key){
         $attractions = $key->attractions()->with('details','addresses','addresses.city','addresses.city.districts')->get();
         foreach($attractions as $att){
-          $categoriesData[] = $att;
+            if($att["addresses"]["city"]["name"] == $city){
+              $categoriesData[] = $att;
+            }
         }
       }
       return response()->json(['data' => $categoriesData], 200);

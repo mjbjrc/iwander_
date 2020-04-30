@@ -288,11 +288,12 @@ export default {
             }
 
             axios.all([
-                    axios.get(`/api/getAttractionsByKeywords/${app.keywordsValues}`),
-                    axios.get(`/api/getAttractionsByCategories/${app.categoryValues}`)
+                    axios.get(`/api/getAttractionsByKeywords/${app.keywordsValues}/${app.$route.query.destination}`),
+                    axios.get(`/api/getAttractionsByCategories/${app.categoryValues}/${app.$route.query.destination}`)
                 ])
                 .then(axios.spread((...results) => {
                     let resultsData = [];
+                    console.log(results);
                     results.forEach(result => {
                         if (result.data.data !== null) {
                             // console.log('data:',result.data.data);
