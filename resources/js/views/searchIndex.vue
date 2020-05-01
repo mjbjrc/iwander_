@@ -406,11 +406,25 @@ export default {
         },
         getAttractions() {
             let app = this;
+            app.attractions = [];
             console.log('Attraction - get cities:', app.city);
             axios.get(`/api/getAttractions/${app.city}`)
                 .then(response => {
-                    let results = response.data.data;
-                    // console.log('att', results);
+                    let res = response.data.data;
+                    let results = '';
+                    // console.log(results);
+                    if(res.length > 0){
+                      console.log("WHAT");
+                      results = res;
+                      console.log(results);
+                    } else {
+                      let array = [];
+                      // results.push(res);
+                      array = res;
+                      results = array;
+                      console.log(results);
+                    }
+
                     results.forEach((result) => {
                         //get categories of each attraction
                         axios.get(`/api/getCategoriesOfAttraction/${result.id}`)
@@ -433,6 +447,8 @@ export default {
                                 console.log(error);
                             });
                     });
+
+
                 })
                 .catch(function(error) {
                     console.log(error);

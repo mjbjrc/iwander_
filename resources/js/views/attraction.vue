@@ -1,13 +1,13 @@
 <template>
-<div>
+<div v-if="attractionLoaded">
     <!---------- ITEM BANNER ---------->
-    <div class="jumbotron jumbotron-fluid item-banner" v-if="attractionLoaded">
+    <div class="jumbotron jumbotron-fluid item-banner">
         <img v-if="attraction.details.image === 'default-image.png'" :src="publicPath + attraction.details.image" />
         <img v-else :src="storagePath + attraction.details.image" />
     </div>
 
     <!---------- CONTENT START ---------->
-    <div class="container" v-if="attractionLoaded">
+    <div class="container">
         <div class="row">
             <div class="col-12">
                 <div class="row">
@@ -76,7 +76,7 @@
                             <p>&euro;{{attraction.details.min_price}}&dash;{{attraction.details.max_price}}</p>
                         </div>
 
-                        <div class="add-info">
+                        <div class="add-info" v-if="noHours === false">
                             <h6>Hours</h6>
                             <table class="hours-table">
                                 <tr>
@@ -208,6 +208,7 @@ export default {
             attractionLoaded: false,
             alertMessage: "",
             show_alert: false,
+            noHours: false,
         }
     },
     watch: {
@@ -237,15 +238,22 @@ export default {
                     app.attraction = response.data.data;
                     app.businessHours = response.data.hours;
 
-                    app.businessHours.forEach((hours) => {
-                      if(hours.open_time === null && hours.close_time === null){
-                        hours.open_time = "CLOSED";
-                      }
-                      else{
-                          hours.open_time = moment(hours.open_time, "HH:mm:ss").format('HH:mm');
-                          hours.close_time = moment(hours.close_time, "HH:mm:ss").format('HH:mm');
-                      }
-                    });
+                    if(app.businessHours.length > 0){
+                      app.businessHours.forEach((hours) => {
+                        if(hours.open_time === null && hours.close_time === null){
+                          hours.open_time = "CLOSED";
+                        }
+                        else{
+                            hours.open_time = moment(hours.open_time, "HH:mm:ss").format('HH:mm');
+                            hours.close_time = moment(hours.close_time, "HH:mm:ss").format('HH:mm');
+                        }
+                      });
+                    }
+                    else {
+                      app.noHours = true;
+                    }
+
+
 
                     app.attractionLoaded = true;
                     // console.log('attraction:',attractionData);
