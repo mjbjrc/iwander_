@@ -14,10 +14,16 @@ class AttractionController extends Controller
 {
     //get attractions in the city
     public function getAttractions($city){
-    $attractions = Attraction::with('details','addresses','addresses.city','addresses.city.districts')->get();
-    $city_attractions = $attractions->where('addresses.city.name', $city);
+      $attractions = Attraction::with('details','addresses','addresses.city','addresses.city.districts')->get();
+      $attractionsData = $attractions->where('addresses.city.name', $city);
 
-    return response()->json(['message' => 'Attraction from City Successfully Collected', 'data' => $city_attractions], 200);
+      //store data in an array
+      $city_attractions = array();
+      foreach($attractionsData as $attraction){
+          $city_attractions[] = $attraction;
+      }
+
+      return response()->json(['message' => 'Attraction from City Successfully Collected', 'data' => $city_attractions], 200);
     }
 
     //get attractions in the itinerary

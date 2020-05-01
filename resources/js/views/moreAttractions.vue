@@ -120,7 +120,7 @@
                                     </div>
                                 </div>
 
-                                <div class="items-index-button">
+                                <div class="items-index-button" v-if="showMoreButton">
                                     <a class="btn btn-primary" @click="loadMore">Show More</a>
                                 </div>
 
@@ -182,11 +182,11 @@ export default {
         },
         getAttractions() {
             let app = this;
+            console.log("AGAIN");
             axios.get(`/api/getAttractions/${app.$route.query.destination}`)
                 .then(response => {
                     // let attractionData = response.data.data;
                     app.attractions = response.data.data;
-                    // console.log('attractions:',attractionData);
                     // app.attractions = attractionData.slice(0, 6);
                 })
                 .catch(function(error) {
@@ -194,17 +194,25 @@ export default {
                 });
         },
         loadMore() {
-            let app = this;
-            let start = 8;
-            let count = 8;
-            axios.get(`/api/getAttractions/${app.$route.query.destination}`)
-                .then(function(response) {
-                    app.attractions = response.data.data;
-                    app.more = false;
-                })
-                .catch(function(error) {
-                    console.log(error);
-                });
+          let app = this;
+          let start = 8;
+          let count = 16;
+          axios.get(`/api/getAttractions/${app.itinerary.destination}`)
+              .then(function(response) {
+                let attracTions = [];
+                  let res = response.data.data;
+                  app.more = false;
+                  console.log(start);
+                  for(let i = start; i < count; i++){
+                    if(res[i] !== undefined){
+                        attracTions.push(res[i]);
+                    }
+                  }
+                  count = count + 8;
+              })
+              .catch(function(error) {
+                  console.log(error);
+              });
         },
         scrollToTop() {
             window.scrollTo(0, 0);
@@ -275,46 +283,58 @@ export default {
         },
         filter() {
             let app = this;
-
+            let value = '0';
             //set value to 0
             if (app.keywordsValues.length === 0) {
                 console.log("non");
                 app.keywordsValues = '0';
             } else if (app.categoryValues.length === 0) {
                 app.categoryValues = '0';
-            } else if ((app.categoryValues.length === 0) && (app.keywordsValues.length === 0)) {
-                app.keywordsValues = '0';
-                app.categoryValues = '0';
             }
 
-            axios.all([
-                    axios.get(`/api/getAttractionsByKeywords/${app.keywordsValues}/${app.$route.query.destination}`),
-                    axios.get(`/api/getAttractionsByCategories/${app.categoryValues}/${app.$route.query.destination}`)
-                ])
-                .then(axios.spread((...results) => {
-                    let resultsData = [];
-                    console.log(results);
-                    results.forEach(result => {
-                        if (result.data.data !== null) {
-                            // console.log('data:',result.data.data);
-                            let res = result.data.data;
-                            res.forEach((r) => {
-                                resultsData.push(r);
-                            })
-                        }
-                    })
-                    app.attractions = resultsData;
-                }))
-                .catch(function(error) {
-                    console.log(error);
-                });
+            if ((app.categoryValues.length === 0) && (app.keywordsValues.length === 1)) {
+                app.getAttractions();
 
-            //back to empty array
-            if (app.keywordsValues == '0') {
-                app.keywordsValues = [];
-            } else if (app.categoryValues == '0') {
-                app.categoryValues = [];
+                //back to empty array
+                if (app.keywordsValues == '0') {
+                    app.keywordsValues = [];
+                } else if (app.categoryValues == '0') {
+                    app.categoryValues = [];
+                }
             }
+            else{
+              axios.all([
+                      axios.get(`/api/getAttractionsByKeywords/${app.keywordsValues}/${app.$route.query.destination}`),
+                      axios.get(`/api/getAttractionsByCategories/${app.categoryValues}/${app.$route.query.destination}`)
+                  ])
+                  .then(axios.spread((...results) => {
+                      let resultsData = [];
+                      console.log(results);
+                      results.forEach(result => {
+                          if (result.data.data !== null) {
+                              // console.log('data:',result.data.data);
+                              let res = result.data.data;
+                              res.forEach((r) => {
+                                  resultsData.push(r);
+                              })
+                          }
+                      })
+                      app.attractions = resultsData;
+                  }))
+                  .catch(function(error) {
+                      console.log(error);
+                  });
+
+              //back to empty array
+              if (app.keywordsValues == '0') {
+                  app.keywordsValues = [];
+              } else if (app.categoryValues == '0') {
+                  app.categoryValues = [];
+              }
+            }
+
+
+
         },
     },
     computed: {
@@ -338,6 +358,14 @@ export default {
         MoreKeywords() {
             return this.keywords;
         },
+        showMoreButton(){
+          if(this.attractions.length > 8){
+            return true;
+          }
+          else {
+            return false;
+          }
+        }
     }
 }
 </script>

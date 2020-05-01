@@ -413,19 +413,8 @@ export default {
             console.log('Attraction - get cities:', app.city);
             axios.get(`/api/getAttractions/${app.city}`)
                 .then(response => {
-                    let res = response.data.data;
-                    let results = [];
-                    if(res.length >0){
-                      results = res;
-                    } else{
-                      for(let i = 0; i < 20; i++){
-                        // console.log(res[i]);
-                        if(res[i] !== undefined){
-                            results.push(res[i]);
-                        }
-                      }
-                    }
-                    console.log(results);
+                    let results = response.data.data;
+
                     results.forEach((result) => {
                         //get categories of each attraction
                         axios.get(`/api/getCategoriesOfAttraction/${result.id}`)

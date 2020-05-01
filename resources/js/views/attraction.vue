@@ -208,7 +208,7 @@ export default {
             attractionLoaded: false,
             alertMessage: "",
             show_alert: false,
-            noHours: false,
+            noHours: true,
         }
     },
     watch: {
@@ -231,6 +231,7 @@ export default {
     },
     methods: {
         getAttraction() {
+            window.scrollTo(0, 0);
             let app = this;
             // console.log(app.att_id);
             axios.get(`/api/getAttraction/${app.att_id}`)
@@ -253,10 +254,7 @@ export default {
                       app.noHours = true;
                     }
 
-
-
                     app.attractionLoaded = true;
-                    // console.log('attraction:',attractionData);
                 })
                 .catch(function(error) {
                     console.log(error);

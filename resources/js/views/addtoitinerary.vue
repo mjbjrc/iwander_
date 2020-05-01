@@ -204,4 +204,9 @@ export default {
         background-color: #2c8cd6;
         color: #fff;
     }
+
+    .sort-selection .sort-selection-link .active{
+      color: #fff;
+      background: #444;
+    }
 </style>
