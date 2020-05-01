@@ -110,7 +110,7 @@
                                             <!-- CARD BODY -->
                                             <div class="card-b-body">
                                                 <ul class="list-inline">
-                                                    <li class="category">{{attraction.attraction_category}}</li>
+                                                    <li v-for="category in attraction.attraction_category.split(',')" class="category">{{category}} </li>
                                                 </ul>
                                                 <router-link :to="{ name: 'attraction', params: {att_id: attraction.attraction.id} }">
                                                     <h6>{{attraction.attraction.name}}</h6>
@@ -168,7 +168,8 @@
                                             <!-- CARD BODY -->
                                             <div class="card-b-body">
                                                 <ul class="list-inline">
-                                                    <li class="category">{{result.restaurant.cuisines}}</li>
+                                                    <!-- <li class="category">{{result.restaurant.cuisines}}</li> -->
+                                                    <li class="category" v-for="cuisine in result.restaurant.cuisines.split(', ')">{{cuisine}}</li>
                                                 </ul>
                                                 <router-link :to="{ name: 'restaurant', params: {res_id: result.restaurant.id} }">
                                                     <h6>{{result.restaurant.name}}</h6>
@@ -417,8 +418,8 @@ export default {
                     if(res.length >0){
                       results = res;
                     } else{
-                      for(let i = 0; i < 12; i++){
-                        console.log(res[i]);
+                      for(let i = 0; i < 20; i++){
+                        // console.log(res[i]);
                         if(res[i] !== undefined){
                             results.push(res[i]);
                         }
