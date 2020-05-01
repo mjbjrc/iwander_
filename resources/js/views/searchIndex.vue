@@ -1,233 +1,235 @@
 <template>
-    <div>
-        <!-- ITEM BANNER -->
-        <div class="jumbotron jumbotron-fluid item-banner" v-for="data in city_data">
-            <img v-if="data.image === 'default-image.png'" :src="publicPath + data.image" />
-            <img v-else :src="storagePath + data.image" />
-        </div>
+<div>
+    <!-- ITEM BANNER -->
+    <div class="jumbotron jumbotron-fluid item-banner" v-for="data in city_data">
+        <img v-if="data.image === 'default-image.png'" :src="publicPath + data.image" />
+        <img v-else :src="storagePath + data.image" />
+    </div>
 
-        <!-- CONTENT START -->
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
+    <!-- CONTENT START -->
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
 
-                    <div class="row">
+                <div class="row">
 
-                        <div class="col-lg-7 col-sm-12" v-for="data in city_data">
+                    <div class="col-lg-7 col-sm-12" v-for="data in city_data">
 
-                            <div class="main-heading order-lg-1">
-                                <h1>{{data.name}}</h1>
-                                <h6 class="subheading">{{data.districts.name}}</h6> <!-- DISTRICT -->
-                                <h6 class="subheading">{{data.districts.country.name}}</h6> <!-- COUNTRY -->
-                                <h6 class="subheading">{{data.districts.country.continent}}</h6> <!-- CONTINENT -->
-                            </div>
-                            <div class="iwander-desc order-lg-2">
-                                <p>{{data.description}}</p>
-                            </div>
-
+                        <div class="main-heading order-lg-1">
+                            <h1>{{data.name}}</h1>
+                            <h6 class="subheading">{{data.districts.name}}</h6> <!-- DISTRICT -->
+                            <h6 class="subheading">{{data.districts.country.name}}</h6> <!-- COUNTRY -->
+                            <h6 class="subheading">{{data.districts.country.continent}}</h6> <!-- CONTINENT -->
+                        </div>
+                        <div class="iwander-desc order-lg-2">
+                            <p>{{data.description}}</p>
                         </div>
 
-                        <div class="col-lg-4 offset-lg-1">
-                            <div class="create-plan-md">
-                                <form v-on:submit.prevent="createItinerary">
-                                    <div class="form-row">
-
-                                        <div class="col-12 form-heading">
-                                            <h4>Create a Travel Plan</h4>
-                                        </div>
-
-                                        <div class="form-group col-12">
-                                            <label for="destination">Destination</label>
-                                            <input id="destination" type="text" class="form-control" v-on:keyup="getSearchData" placeholder="Enter city" v-model="itinerary.destination" name="destination" autocomplete="off"></input>
-                                            <div class="dropdown-results" v-if="dropdowns.length" style="width:100% !important;">
-                                                <div class="dropdown" v-for="dropdown in dropdowns" aria-haspopup="true" aria-expanded="false">
-                                                    <a class="dropdown-item"><li class="dropdown-item" @click="getResult(dropdown.name)">{{ dropdown.name }}, {{dropdown.districts.country.name}}</li></a>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group col-12">
-                                            <label for="start_date">Start Date</label>
-                                            <input id="start_date" type="date" class="form-control" v-model="itinerary.start_date" name="start_date" required autocomplete="current-password">
-                                        </div>
-
-                                        <div class="form-group col-12">
-                                            <label for="end_date">End Date</label>
-                                            <input id="end_date" type="date" class="form-control" v-model="itinerary.end_date" name="end_date" required autocomplete="current-password">
-                                        </div>
-
-                                        <div class="form-button col-12">
-                                            <button class="btn btn-primary" type="submit">Create</button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
                     </div>
 
-                    <!-- SECTION START -->
-                    <div class="row">
-                        <div class="iwander-section">
+                    <div class="col-lg-4 offset-lg-1">
+                        <div class="create-plan-md">
+                            <form v-on:submit.prevent="createItinerary">
+                                <div class="form-row">
 
-                            <div class="col-12 section-heading">
-                                <h3>Things to do in {{this.city}}</h3>
-                            </div>
+                                    <div class="col-12 form-heading">
+                                        <h4>Create a Travel Plan</h4>
+                                    </div>
 
-                            <!-- ATTRACTIONS LIST START -->
-                            <div class="col-12">
-                                <div class="row">
-
-                                    <div class="col-12 col-lg-4 col-md-6" v-for="attraction in attractions.slice(0,6)">
-                                        <div class="card-b">
-                                            <!-- CARD BUTTONS -->
-                                            <div class="card-buttons">
-                                                <a href="#" class="card-action" title="Add to Bookmarks" @click="addToBookmarks(0, attraction.attraction.id)">
-                                                    <jam-heart/>
-                                                </a>
-
-                                                <a href="#" class="card-action" title="Add to Travel Itinerary" @click="addToItinerary(0, attraction.attraction.id)">
-                                                    <jam-plus/>
+                                    <div class="form-group col-12">
+                                        <label for="destination">Destination</label>
+                                        <input id="destination" type="text" class="form-control" v-on:keyup="getSearchData" placeholder="Enter city" v-model="itinerary.destination" name="destination" autocomplete="off"></input>
+                                        <div class="dropdown-results" v-if="dropdowns.length" style="width:100% !important;">
+                                            <div class="dropdown" v-for="dropdown in dropdowns" aria-haspopup="true" aria-expanded="false">
+                                                <a class="dropdown-item">
+                                                    <li class="dropdown-item" @click="getResult(dropdown.name)">{{ dropdown.name }}, {{dropdown.districts.country.name}}</li>
                                                 </a>
                                             </div>
-
-                                            <a>
-                                                <!-- CARD IMAGE -->
-                                                <div class="card-b-img">
-                                                    <a v-if="attraction.attraction.details.image === 'default-image.png'">
-                                                        <router-link :to="{ name: 'attraction', params: {att_id: attraction.attraction.id} }">
-                                                            <img class="img-fluid" :src="publicPath + attraction.attraction.details.image" :img-alt="attraction.attraction.name" />
-                                                        </router-link>
-                                                    </a>
-                                                    <a v-else>
-                                                        <router-link :to="{ name: 'attraction', params: {att_id: attraction.attraction.id} }">
-                                                            <img class="img-fluid" :src="storagePath + attraction.attraction.details.image" :img-alt="attraction.attraction.name" />
-                                                        </router-link>
-                                                    </a>
-                                                </div>
-
-                                                <!-- CARD BODY -->
-                                                <div class="card-b-body">
-                                                    <ul class="list-inline">
-                                                        <li class="category">{{attraction.attraction_category}}</li>
-                                                    </ul>
-                                                    <router-link :to="{ name: 'attraction', params: {att_id: attraction.attraction.id} }">
-                                                        <h6>{{attraction.attraction.name}}</h6>
-                                                    </router-link>
-                                                </div>
-                                            </a>
-
                                         </div>
                                     </div>
 
-                                </div>
-                            </div>
-                            <!-- ATTRACTIONS LIST END -->
-
-                            <div class="col-12 section-button">
-                                <router-link :to="{ name: 'moreAttractions', query: {destination: this.city}}">
-                                    <button class="btn btn-primary" type="submit">Show All</button>
-                                </router-link>
-                            </div>
-
-                        </div>
-                    </div>
-
-
-                    <div class="row">
-                        <div class="iwander-section">
-
-                            <div class="col-12 section-heading">
-                                <h3>Where to eat in {{this.city}}</h3>
-                            </div>
-                            <div class="col-12">
-                                <div class="row">
-
-                                    <div class="col-12 col-lg-4 col-md-6" v-for="result in results.slice(0,6)" :key="result.restaurant.id">
-                                        <div class="card-b">
-                                            <!-- CARD BUTTONS -->
-                                            <div class="card-buttons">
-                                                <a href="#" class="card-action" title="Add to Bookmarks" @click="addToBookmarks(1, result.restaurant.id)">
-                                                    <jam-heart/>
-                                                </a>
-
-                                                <a href="#" class="card-action" title="Add to Travel Itinerary" @click="addToItinerary(1, result.restaurant.id)">
-                                                    <jam-plus/>
-                                                </a>
-                                            </div>
-
-                                            <a>
-                                                <!-- CARD IMAGE -->
-                                                <div class="card-b-img">
-                                                    <router-link :to="{ name: 'restaurant', params: {res_id: result.restaurant.id} }">
-                                                        <img :src="result.restaurant.featured_image" class="img-fluid" :img-alt="result.restaurant.name">
-                                                    </router-link>
-                                                </div>
-
-                                                <!-- CARD BODY -->
-                                                <div class="card-b-body">
-                                                    <ul class="list-inline">
-                                                        <li class="category">{{result.restaurant.cuisines}}</li>
-                                                    </ul>
-                                                    <router-link :to="{ name: 'restaurant', params: {res_id: result.restaurant.id} }">
-                                                        <h6>{{result.restaurant.name}}</h6>
-                                                    </router-link>
-                                                </div>
-                                            </a>
-                                        </div>
+                                    <div class="form-group col-12">
+                                        <label for="start_date">Start Date</label>
+                                        <input id="start_date" type="date" class="form-control" v-model="itinerary.start_date" name="start_date" required autocomplete="current-password">
                                     </div>
 
-                                </div>
-                            </div>
-
-                            <div class="col-12 section-button">
-                                <router-link :to="{ name: 'moreRestaurants', params: {entity_id: this.entity_id }, query: {destination: this.city, entity_type: this.entity_type, city_id: this.city_id}}">
-                                    <button class="btn btn-primary">Show All</button>
-                                </router-link>
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="iwander-section">
-
-                            <div class="col-12 section-heading" v-for="data in city_data">
-                                <h3>Explore other cities of {{data.districts.country.name}}</h3>
-                            </div>
-
-                            <div class="col-12">
-                                <div class="row">
-                                    <!-- CARD START -->
-                                    <div class="col-6 col-lg-3 col-sm-6" v-for="result in cities">
-                                        <div class="card-a">
-                                            <a>
-                                                <!-- CARD IMAGE -->
-                                                <div class="card-a-img">
-                                                    <img v-if="result.image === 'default-image.png'" :src="publicPath + result.image" class="img-fluid" :img-alt="result.name">
-                                                    <img v-else :src="storagePath + result.image" class="img-fluid" :img-alt="result.name">
-                                                </div>
-                                                <!-- CARD BODY -->
-                                                <div class="card-a-body">
-                                                    <router-link :to="{ name: 'searchIndex', params: {city: result.name } }">
-                                                        <h5>{{result.name}}</h5>
-                                                    </router-link>
-                                                </div>
-                                            </a>
-                                        </div>
+                                    <div class="form-group col-12">
+                                        <label for="end_date">End Date</label>
+                                        <input id="end_date" type="date" class="form-control" v-model="itinerary.end_date" name="end_date" required autocomplete="current-password">
                                     </div>
-                                    <!-- CARD END -->
-                                </div>
-                            </div>
 
+                                    <div class="form-button col-12">
+                                        <button class="btn btn-primary" type="submit">Create</button>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <addToItinerary v-if="show_modal" @submit="show_modal = false" @close="show_modal = false" :aOr="addToItineraryKey" :id="addToItineraryID"> </addToItinerary>
-            <alert v-if="show_alert" @close="show_alert = false" :alertMessage="alertMessage"> </alert>
+                <!-- SECTION START -->
+                <div class="row">
+                    <div class="iwander-section">
+
+                        <div class="col-12 section-heading">
+                            <h3>Things to do in {{this.city}}</h3>
+                        </div>
+
+                        <!-- ATTRACTIONS LIST START -->
+                        <div class="col-12">
+                            <div class="row">
+
+                                <div class="col-12 col-lg-4 col-md-6" v-for="attraction in attractions.slice(0,6)">
+                                    <div class="card-b">
+                                        <!-- CARD BUTTONS -->
+                                        <div class="card-buttons">
+                                            <a href="#" class="card-action" title="Add to Bookmarks" @click="addToBookmarks(0, attraction.attraction.id)">
+                                                <jam-heart />
+                                            </a>
+
+                                            <a href="#" class="card-action" title="Add to Travel Itinerary" @click="addToItinerary(0, attraction.attraction.id)">
+                                                <jam-plus />
+                                            </a>
+                                        </div>
+
+                                        <a>
+                                            <!-- CARD IMAGE -->
+                                            <div class="card-b-img">
+                                                <a v-if="attraction.attraction.details.image === 'default-image.png'">
+                                                    <router-link :to="{ name: 'attraction', params: {att_id: attraction.attraction.id} }">
+                                                        <img class="img-fluid" :src="publicPath + attraction.attraction.details.image" :img-alt="attraction.attraction.name" />
+                                                    </router-link>
+                                                </a>
+                                                <a v-else>
+                                                    <router-link :to="{ name: 'attraction', params: {att_id: attraction.attraction.id} }">
+                                                        <img class="img-fluid" :src="storagePath + attraction.attraction.details.image" :img-alt="attraction.attraction.name" />
+                                                    </router-link>
+                                                </a>
+                                            </div>
+
+                                            <!-- CARD BODY -->
+                                            <div class="card-b-body">
+                                                <ul class="list-inline">
+                                                    <li class="category">{{attraction.attraction_category}}</li>
+                                                </ul>
+                                                <router-link :to="{ name: 'attraction', params: {att_id: attraction.attraction.id} }">
+                                                    <h6>{{attraction.attraction.name}}</h6>
+                                                </router-link>
+                                            </div>
+                                        </a>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <!-- ATTRACTIONS LIST END -->
+
+                        <div class="col-12 section-button">
+                            <router-link :to="{ name: 'moreAttractions', query: {destination: this.city}}">
+                                <button class="btn btn-primary" type="submit">Show All</button>
+                            </router-link>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="iwander-section">
+
+                        <div class="col-12 section-heading">
+                            <h3>Where to eat in {{this.city}}</h3>
+                        </div>
+                        <div class="col-12">
+                            <div class="row">
+
+                                <div class="col-12 col-lg-4 col-md-6" v-for="result in results.slice(0,6)" :key="result.restaurant.id">
+                                    <div class="card-b">
+                                        <!-- CARD BUTTONS -->
+                                        <div class="card-buttons">
+                                            <a href="#" class="card-action" title="Add to Bookmarks" @click="addToBookmarks(1, result.restaurant.id)">
+                                                <jam-heart />
+                                            </a>
+
+                                            <a href="#" class="card-action" title="Add to Travel Itinerary" @click="addToItinerary(1, result.restaurant.id)">
+                                                <jam-plus />
+                                            </a>
+                                        </div>
+
+                                        <a>
+                                            <!-- CARD IMAGE -->
+                                            <div class="card-b-img">
+                                                <router-link :to="{ name: 'restaurant', params: {res_id: result.restaurant.id} }">
+                                                    <img :src="result.restaurant.featured_image" class="img-fluid" :img-alt="result.restaurant.name">
+                                                </router-link>
+                                            </div>
+
+                                            <!-- CARD BODY -->
+                                            <div class="card-b-body">
+                                                <ul class="list-inline">
+                                                    <li class="category">{{result.restaurant.cuisines}}</li>
+                                                </ul>
+                                                <router-link :to="{ name: 'restaurant', params: {res_id: result.restaurant.id} }">
+                                                    <h6>{{result.restaurant.name}}</h6>
+                                                </router-link>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="col-12 section-button">
+                            <router-link :to="{ name: 'moreRestaurants', params: {entity_id: this.entity_id }, query: {destination: this.city, entity_type: this.entity_type, city_id: this.city_id}}">
+                                <button class="btn btn-primary">Show All</button>
+                            </router-link>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="iwander-section">
+
+                        <div class="col-12 section-heading" v-for="data in city_data">
+                            <h3>Explore other cities of {{data.districts.country.name}}</h3>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="row">
+                                <!-- CARD START -->
+                                <div class="col-6 col-lg-3 col-sm-6" v-for="result in cities">
+                                    <div class="card-a">
+                                        <a>
+                                            <!-- CARD IMAGE -->
+                                            <div class="card-a-img">
+                                                <img v-if="result.image === 'default-image.png'" :src="publicPath + result.image" class="img-fluid" :img-alt="result.name">
+                                                <img v-else :src="storagePath + result.image" class="img-fluid" :img-alt="result.name">
+                                            </div>
+                                            <!-- CARD BODY -->
+                                            <div class="card-a-body">
+                                                <router-link :to="{ name: 'searchIndex', params: {city: result.name } }">
+                                                    <h5>{{result.name}}</h5>
+                                                </router-link>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                                <!-- CARD END -->
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
         </div>
+
+        <addToItinerary v-if="show_modal" @submit="show_modal = false" @close="show_modal = false" :aOr="addToItineraryKey" :id="addToItineraryID"> </addToItinerary>
+        <alert v-if="show_alert" @close="show_alert = false" :alertMessage="alertMessage"> </alert>
     </div>
+</div>
 </template>
 
 <script>
@@ -341,7 +343,7 @@ export default {
                     results.forEach((result) => {
                         // console.log('res', result);
                         app.district = result.districts.name;
-                          app.country = result.districts.country.name;
+                        app.country = result.districts.country.name;
                         // console.log('District:', app.district);
                     })
                     app.city_data = results;
@@ -396,7 +398,7 @@ export default {
                     citiesData.forEach((result) => {
                         let cities = result.cities;
                         cities.forEach((res) => {
-                          app.citiesindistricts.push(res);
+                            app.citiesindistricts.push(res);
                         })
                     })
                 })
@@ -411,20 +413,18 @@ export default {
             axios.get(`/api/getAttractions/${app.city}`)
                 .then(response => {
                     let res = response.data.data;
-                    let results = '';
-                    // console.log(results);
-                    if(res.length > 0){
-                      console.log("WHAT");
+                    let results = [];
+                    if(res.length >0){
                       results = res;
-                      console.log(results);
-                    } else {
-                      let array = [];
-                      // results.push(res);
-                      array = res;
-                      results = array;
-                      console.log(results);
+                    } else{
+                      for(let i = 0; i < 12; i++){
+                        console.log(res[i]);
+                        if(res[i] !== undefined){
+                            results.push(res[i]);
+                        }
+                      }
                     }
-
+                    console.log(results);
                     results.forEach((result) => {
                         //get categories of each attraction
                         axios.get(`/api/getCategoriesOfAttraction/${result.id}`)
@@ -441,7 +441,7 @@ export default {
                                     attraction_category: categ
                                 });
 
-                                app.attractions =  _.shuffle(app.attractions);
+                                app.attractions = _.shuffle(app.attractions);
                             })
                             .catch(function(error) {
                                 console.log(error);
@@ -578,28 +578,30 @@ export default {
                 // window.scrollTo(0, 0);
             }
         },
-        getSearchData(){
+        getSearchData() {
             this.dropdowns = [];
-            if(this.itinerary.destination.length > 0){
-             axios.get('/api/search', { params: { search: this.itinerary.destination } }).then(response => {
-              this.dropdowns = response.data;
-             });
-           }
+            if (this.itinerary.destination.length > 0) {
+                axios.get('/api/search', {
+                    params: {
+                        search: this.itinerary.destination
+                    }
+                }).then(response => {
+                    this.dropdowns = response.data;
+                });
+            }
         },
-        getResult(result){
-          console.log(result.name);
-          this.itinerary.destination = result;
-          this.dropdowns = [];
+        getResult(result) {
+            console.log(result.name);
+            this.itinerary.destination = result;
+            this.dropdowns = [];
         }
     },
     computed: {
-      cities() {
-          return this.citiesindistricts.slice(0, 8);
-      }
+        cities() {
+            return this.citiesindistricts.slice(0, 8);
+        }
     }
 }
-
-
 </script>
 <style>
 .title {
