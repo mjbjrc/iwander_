@@ -170,6 +170,7 @@ export default {
         }
     },
     mounted() {
+      window.scrollTo(0, 0);
         this.getAttractions();
         this.getCategories();
         this.getKeywords();
@@ -181,8 +182,8 @@ export default {
             console.log('va', app.sortBy);
         },
         getAttractions() {
+
             let app = this;
-            console.log("AGAIN");
             axios.get(`/api/getAttractions/${app.$route.query.destination}`)
                 .then(response => {
                     // let attractionData = response.data.data;

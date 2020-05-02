@@ -29,12 +29,19 @@
                                         </a>
                                     </div>
 
-                                    <div class="col-12">
+                                    <!-- <div class="col-12">
                                         <a class="btn action-selection-link" href="#" role="button" @click="addToBookmarks(itinerary.id)">
                                             <span class="jam jam-heart" data-fill="#444" data-width="18" data-height="18"></span> Add to Bookmarks
                                         </a>
-                                    </div>
+                                    </div> -->
 
+                                </div>
+                                <div class="row" v-else>
+                                <div class="col-12">
+                                    <a class="btn action-selection-link" href="#" role="button" @click="addToBookmarks(itinerary.id)">
+                                        <span class="jam jam-heart" data-fill="#444" data-width="18" data-height="18"></span> Add to Bookmarks
+                                    </a>
+                                </div>
                                 </div>
                             </div>
 
@@ -82,7 +89,6 @@
                                             <p class="address">{{plan.attraction.addresses.address1}}, {{plan.attraction.addresses.city.name}}, {{plan.attraction.addresses.city.districts.name}}
                                             </p>
                                         </div>
-
                                             <span class="event-details">
                                                 <p>{{moment(plan.start_time, "HH:mm:ss").format('HH:mm')}} to {{moment(plan.end_time, "HH:mm:ss").format('HH:mm')}}</p>
                                             </span>
@@ -275,6 +281,7 @@ export default {
                                 event_id: e.id,
                                 start_time: e.start_time,
                                 end_time: e.end_time,
+                                notes: e.notes,
                                 attraction: null,
                                 attraction_category: null,
                                 restaurants: results
@@ -298,6 +305,7 @@ export default {
                                 event_id: e.id,
                                 start_time: e.start_time,
                                 end_time: e.end_time,
+                                notes: e.notes,
                                 attraction: e.attraction,
                                 attraction_category: categories,
                                 restaurants: null

@@ -326,6 +326,7 @@ export default {
 
         getSimilarAttractions() {
             let app = this;
+            console.log(app.attraction.addresses.city.name);
             axios.get(`/api/getAttractionsByCategories/${app.categories}/${app.attraction.addresses.city.name}`)
                 .then(response => {
                     let results = response.data.data;

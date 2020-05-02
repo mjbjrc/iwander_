@@ -552,7 +552,7 @@ export default {
                 app.$router.push({
                     name: 'login'
                 });
-                // window.scrollTo(0, 0);
+                window.scrollTo(0, 0);
             }
         },
         addToItinerary(key, id) {
@@ -565,7 +565,7 @@ export default {
                 this.$router.push({
                     name: 'login'
                 });
-                // window.scrollTo(0, 0);
+                window.scrollTo(0, 0);
             }
         },
         getSearchData() {

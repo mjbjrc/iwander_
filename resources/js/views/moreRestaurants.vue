@@ -240,6 +240,7 @@ export default {
         }
     },
     mounted() {
+      window.scrollTo(0, 0);
         this.getRestaurants();
         this.getEstablishments();
         this.getCuisines();
@@ -258,6 +259,7 @@ export default {
           // console.log('va', app.sortBy);
       },
         getRestaurants() {
+
           let establishments = this.establishmentValues.join(',');
           let cuisines = this.cuisineValues.join(',');
           let categories = this.categoryValues.join(',');
