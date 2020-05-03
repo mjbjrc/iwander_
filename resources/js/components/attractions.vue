@@ -176,8 +176,6 @@ export default {
                   let attracTions = [];
                     let res = response.data.data;
                     app.more = false;
-                    // console.log(res[i]);
-
                     console.log(start);
                     for(let i = start; i < count; i++){
                       if(res[i] !== undefined){
