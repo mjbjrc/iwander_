@@ -13,9 +13,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-      if ($this->app->environment() !== 'production') {
-          $this->app->register(IdeHelperServiceProvider::class);
-      }
+      // if ($this->app->environment() !== 'production') {
+      //     $this->app->register(IdeHelperServiceProvider::class);
+      // }
     }
 
     /**
@@ -26,8 +26,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
       Schema::defaultStringLength(191);
-      if(config(‘app.env’) === ‘production’) {
-          \URL::forceScheme(‘https’);
-        }
+      // if(config(‘app.env’) === ‘production’) {
+      //     \URL::forceScheme(‘https’);
+      //   }
     }
 }
