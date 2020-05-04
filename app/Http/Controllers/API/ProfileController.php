@@ -69,7 +69,7 @@ class ProfileController extends Controller
       $ext = $image->getClientOriginalExtension();
       $filename = uniqid().'.'.$ext;
       $image->storeAs('public/images', $filename);
-      $request->image->move(public_path('/uploadimages/', $filename));
+      // $request->image->move(public_path('/uploadimages/', $filename));
       Storage::delete("public/images/{$user->image}");
       $user->image = $filename;
     }
