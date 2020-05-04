@@ -32,7 +32,7 @@ class AppServiceProvider extends ServiceProvider
     {
       Schema::defaultStringLength(191);
       $environment = App::environment();
-
+      var_dump($environment);
       if($environment === ‘production’) {
           \URL::forceScheme('https');
         }
