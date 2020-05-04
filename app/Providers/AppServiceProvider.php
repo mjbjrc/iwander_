@@ -2,7 +2,7 @@
 
 
 namespace App\Providers;
-use App;
+namespace App;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\URL;
