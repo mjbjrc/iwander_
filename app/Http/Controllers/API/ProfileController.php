@@ -33,7 +33,10 @@ class ProfileController extends Controller
       $ext = $image->getClientOriginalExtension();
       $filename = uniqid().'.'.$ext;
       $image->storeAs('public/images', $filename);
-      Storage::disk('uploads')->put('filename', $filename);
+      $path = public_path().'/uploads';
+      $upload = $image->move($path, $filename);
+      // $image->storeAs('public/uploads', $filename);
+      // Storage::disk('uploads')->put($filename, $image);
       Storage::delete("public/images/{$user->image}");
       $user->image = $filename;
     }
@@ -70,9 +73,11 @@ class ProfileController extends Controller
       $ext = $image->getClientOriginalExtension();
       $filename = uniqid().'.'.$ext;
       $image->storeAs('public/images', $filename);
+      $path = public_path().'/uploads';
+      $upload = $image->move($path, $filename);
       // $image->move(public_path(), $filename);
       // $request->image->move(public_path('/uploadimages/', $filename));
-      Storage::disk('uploads')->put('filename', $filename);
+      // Storage::disk('uploads')->storeAs('filename', $filename);
       Storage::delete("public/images/{$user->image}");
       $user->image = $filename;
     }

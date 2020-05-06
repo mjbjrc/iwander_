@@ -157,7 +157,7 @@ export default {
             noItineraries: false,
             defaultImage: '',
             publicPath: '/images/',
-            storagePath: '../storage/app/public/images/'
+            storagePath: 'uploads/'
         }
     },
     mounted() {
