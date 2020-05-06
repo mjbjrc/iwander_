@@ -1,9 +1,9 @@
 <template>
   <div>
-    <navbar :app="this" v-if="!$route.meta.hideNavigation"></navbar>
+    <navbar :app="this" v-if="!$route.meta.hideNavigation" :isLoggedIn="isLoggedIn" @login="login()" @logout="logout()"></navbar>
     <!-- <itinerarybuilderNav v-if="$route.meta.showItineraryBuilder" @proceed="proceed()"></itinerarybuilderNav> -->
 
-      <router-view :user="this.user"> </router-view>
+      <router-view :user="this.user" :isLoggedIn="isLoggedIn" @login="login()" @logout="logout()"> </router-view>
     <footerbar v-if="!$route.meta.hideFooter"></footerbar>
   </div>
 </template>
@@ -20,13 +20,30 @@ import itinerarybuilderNav from './components/itinerarybuilderNav'
     },
     data(){
       return{
-        user: "",
+      isLoggedIn: false,
+      user: {}
       }
     },
     created(){
-      this.init();
+      this.checkIfLoggedIn();
     },
     methods: {
+      checkIfLoggedIn(){
+        let token = localStorage.getItem("token");
+        console.log("Check if log in");
+        if(token) {
+          this.isLoggedIn = true;
+          this.init();
+        } else {
+          this.isLoggedIn = false;
+        }
+      },
+      login(){
+        this.isLoggedIn = true;
+      },
+      logout(){
+        this.isLoggedIn = false;
+      },
       init(){
         let token = localStorage.getItem("token");
         axios.get('/api/user',{

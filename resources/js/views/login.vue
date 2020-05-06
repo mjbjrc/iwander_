@@ -54,12 +54,6 @@ export default {
             errors: []
         }
     },
-    // mounted(){
-    //   if (localStorage.getItem("token") !== null){
-    //     this.$router.replace({name: 'home'});
-    //     console.log("USER LOGGED IN");
-    //   }
-    // },
     methods: {
         login() {
             let app = this;
@@ -72,12 +66,12 @@ export default {
                     app.name = response.data.name;
                     app.email = response.data.email;
                     localStorage.setItem("token", response.data.token);
-
+                    app.$emit('login');
                     //go to home
                     app.$router.push({
                         name: 'home'
                     });
-                    location.reload();
+                    // location.reload();
                 })
                 .catch(function(error) {
                   console.log(error.response.data.errors);
@@ -97,8 +91,6 @@ export default {
             return "Password do not match. Try again!";
           }
         }
-
-
     },
     computed:{
 

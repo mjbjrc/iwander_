@@ -35,23 +35,23 @@
                           </li>
 
                           <li class="nav-item">
-                            <router-link to="/register-account" class="nav-link" v-if="isLoggedin === false">Sign Up</router-link>
+                            <router-link to="/register-account" class="nav-link" v-if="isLoggedIn === false">Sign Up</router-link>
                           </li>
 
                           <li class="nav-item">
-                            <router-link to="/sign-in" class="last-nav-link" v-if="isLoggedin === false">Sign In</router-link>
+                            <router-link to="/sign-in" class="last-nav-link" v-if="isLoggedIn === false">Sign In</router-link>
                           </li>
 
                           <li class="nav-item">
-                            <router-link to="/my-profile" class="nav-link" v-if="isLoggedin === true">Profile</router-link>
+                            <router-link to="/my-profile" class="nav-link" v-if="isLoggedIn === true">Profile</router-link>
                           </li>
 
                           <li class="nav-item">
-                            <router-link to="/edit-profile" class="nav-link" v-if="isLoggedin === true">Settings</router-link>
+                            <router-link to="/edit-profile" class="nav-link" v-if="isLoggedIn === true">Settings</router-link>
                           </li>
 
                           <li class="nav-item">
-                            <a @click="logout" class="last-nav-link" v-if="isLoggedin === true">Sign Out</a>
+                            <a @click="logout" class="last-nav-link" v-if="isLoggedIn === true">Sign Out</a>
                           </li>
                       </ul>
                   </div>
@@ -66,24 +66,21 @@ import autocomplete from './autocomplete'
 
   export default{
     name: 'navbar',
-    props: ['app','isLoggedIn'],
+    props: {
+        isLoggedIn: Boolean
+    },
     components: {
       autocomplete
     },
     data(){
       return{
-        isLoggedin: false
       }
     },
     watch: {
-      isLoggedin: function(newVal, oldVal){
-        immediate: true,
-        this.checkIfLoggedIn();
+      isLoggedIn: function(newVal, oldVal){
+        immediate: true
         // console.log('prop changed: ', newVal, '| was: ', oldVal);
       }
-    },
-    created(){
-      this.checkIfLoggedIn();
     },
     methods: {
       logout(){
@@ -100,17 +97,9 @@ import autocomplete from './autocomplete'
 
         console.log("USER LOGGED OUT");
         localStorage.removeItem('token');
-        this.checkIfLoggedIn();
+        // this.checkIfLoggedIn();
+        this.$emit('logout');
         this.$router.push({name: 'home'});
-      },
-      checkIfLoggedIn(){
-        let token = localStorage.getItem("token");
-        console.log("Check if log in");
-        if(token) {
-          this.isLoggedin = true;
-        } else {
-          this.isLoggedin = false;
-        }
       }
     }
   }
