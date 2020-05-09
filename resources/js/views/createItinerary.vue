@@ -160,7 +160,7 @@ export default {
         },
         getResult(result){
           // this.results = [];
-          console.log(result.name);
+          console.log(result);
           this.itinerary.destination = result;
           this.results = [];
           // this.$router.replace({name: 'searchIndex', params: { city: result.name }});
