@@ -15,6 +15,7 @@ class CountryController extends Controller
   //get cities in the district
   public function getCitiesofCountry($country){
     $country_name = Country::where('name', $country)->get();
+    // dd($country_name);
     $cities = $country_name->load(['cities']);
     // $cities = $districts->load(['cities']);
     // dd($cities);

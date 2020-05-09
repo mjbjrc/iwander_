@@ -96,6 +96,8 @@ class AttractionController extends Controller
             $ext = $image->getClientOriginalExtension();
             $filename = uniqid().'.'.$ext;
             $image->storeAs('public/images', $filename);
+            $path = public_path().'/uploads';
+            $upload = $image->move($path, $filename);
             Storage::delete("public/images/{$detail->image}");
             $detail->image = $filename;
         }
@@ -175,10 +177,13 @@ class AttractionController extends Controller
         $category_attraction = $attraction->categories()->get();
         $category_attraction_ids = array();
         foreach ($category_attraction as $key) {
-          $category_attraction_ids = $key->id;
+          $category_attraction_ids[] = $key->id;
         }
-        // dd($category_attraction_ids);
-        // $keyword_attraction = $attraction->keywords()->get();
+        $keyword_attraction = $attraction->keywords()->get();
+        $keyword_attraction_ids = array();
+        foreach ($keyword_attraction as $key) {
+          $keyword_attraction_ids[] = $key->id;
+        }
 
         return view('admin.attractions.edit')->with([
             'countries' => $countries,
@@ -186,8 +191,9 @@ class AttractionController extends Controller
             'cities' => $cities,
             'categories' => $categories,
             'attraction' => $attraction,
-            // 'category_attraction' => $category_attraction,
-            'keywords' => $keywords
+            'category_attraction_ids' => $category_attraction_ids,
+            'keywords' => $keywords,
+            'keyword_attraction_ids' => $keyword_attraction_ids
         ]);
     }
 
@@ -224,6 +230,8 @@ class AttractionController extends Controller
             $ext = $image->getClientOriginalExtension();
             $filename = uniqid().'.'.$ext;
             $image->storeAs('public/images', $filename);
+            $path = public_path().'/uploads';
+            $upload = $image->move($path, $filename);
             Storage::delete("public/images/{$attraction->details->image}");
             $attraction->details->image = $filename;
         }

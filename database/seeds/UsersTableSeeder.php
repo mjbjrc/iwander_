@@ -42,5 +42,21 @@ class UsersTableSeeder extends Seeder
         $user->save();
 
         $user->roles()->attach($role_user);
+
+        $user = new User();
+        $user->name = 'Emma Swan';
+        $user->email = 'emmaswan@travelsite.ie';
+        $user->password = bcrypt('secret');
+        $user->save();
+
+        $user->roles()->attach($role_user);
+
+        $user = new User();
+        $user->name = 'Killian Jones';
+        $user->email = 'killianjones@travelsite.ie';
+        $user->password = bcrypt('secret');
+        $user->save();
+
+        $user->roles()->attach($role_user);
     }
 }

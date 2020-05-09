@@ -6,7 +6,7 @@
    </div>
 
  <div class="dropdown-results" v-if="results.length">
-   <div class="dropdown" v-for="result in results" aria-haspopup="true" aria-expanded="false">
+   <div class="dropdown" v-for="result in results.slice(0,5)" aria-haspopup="true" aria-expanded="false">
        <a class="dropdown-item"><li class="dropdown-item" @click="getResult(result)">{{ result.name }},  {{result.districts.country.name}}</li></a>
    </div>
  </div>

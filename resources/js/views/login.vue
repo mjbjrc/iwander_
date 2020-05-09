@@ -91,14 +91,7 @@ export default {
             return "Password do not match. Try again!";
           }
         }
-    },
-    computed:{
-
-    },
-    getError: function(field) {
-
     }
-
 }
 </script>
 

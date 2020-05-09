@@ -120,7 +120,7 @@ export default {
             showLessCategories: true,
             showLessKeywords: true,
             publicPath: '/images/',
-            storagePath: '../storage/images/'
+            storagePath: '/uploads/'
         }
     },
     methods: {

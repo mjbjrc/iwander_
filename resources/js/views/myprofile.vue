@@ -7,7 +7,7 @@
                     <div class="row">
 
                         <div class="col-lg-4">
-                            <div class="profile-info">
+                            <div class="profile-info" >
 
                                 <div class="avatar">
                                     <img v-if="user.image === 'image.jpg'" class="img-fluid" :src="publicPath + user.image" />
@@ -18,7 +18,7 @@
                                 <p>{{ user.email }}</p>
 
                                 <div class="profile-info-buttons">
-                                    <button class="btn btn-secondary-xs" @click="showModal" id="show_modal">Edit Avatar</button>
+                                    <button class="btn btn-secondary-xs" @click="show_modal = true" id="show_modal">Edit Avatar</button>
                                     <router-link to="/edit-profile">
                                         <button class="btn btn-primary-xs">Edit Profile</button>
                                     </router-link>
@@ -112,7 +112,7 @@
                     </div>
                 </div>
 
-                <editprofile v-if="show_modal" @submit="show_modal = false" @close="hide()"> </editprofile>
+                <editprofile v-if="show_modal" @submit="show_modal = false; getUser()" @close="show_modal = false"> </editprofile>
 
             </div>
         </div>
@@ -169,10 +169,6 @@ export default {
         this.debouncedGetUser = _.debounce(this.getUser);
     },
     methods: {
-        hide() {
-            this.show_modal = false;
-            this.debouncedGetUser();
-        },
         viewBookmark() {
             let app = this;
             // app.allBookmarks = [];
@@ -242,6 +238,7 @@ export default {
             })
         },
         getUser() {
+            console.log("AGAIN");
             let app = this;
             let token = localStorage.getItem("token");
             axios.get('/api/user', {
@@ -252,16 +249,11 @@ export default {
                 .then(response => {
                     app.user = response.data.user;
                     console.log('user', app.user);
-
                     // console.log(app.user);
-
                 })
                 .catch(function(error) {
                     console.log(error);
                 });
-        },
-        showModal() {
-            this.show_modal = true;
         },
         viewItineraries() {
             let app = this;

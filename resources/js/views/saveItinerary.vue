@@ -172,7 +172,7 @@ export default {
             showFD: true,
             FDdate: '',
             publicPath: '/images/',
-            storagePath: '../storage/images/'
+            storagePath: 'uploads/'
         }
     },
     created() {

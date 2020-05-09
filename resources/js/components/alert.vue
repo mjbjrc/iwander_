@@ -9,7 +9,8 @@
                       <button class="float-right" @click="$emit('close')">
                         <jam-close/>
                       </button>
-                      <h4>{{this.alertMessage}}</h4>
+                      <h4>Added to bookmarks!</h4>
+                      <!-- <h4>{{this.alertMessage}}</h4> -->
                     </slot>
                 </div>
             </div>
@@ -20,7 +21,7 @@
 <script>
 export default {
     name: 'alert',
-    props: ['alertMessage'],
+    // props: ['alertMessage'],
     data() {
         return {
 

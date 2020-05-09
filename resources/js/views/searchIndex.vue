@@ -10,7 +10,6 @@
     <div class="container">
         <div class="row">
             <div class="col-12">
-
                 <div class="row">
 
                     <div class="col-lg-7 col-sm-12" v-for="data in city_data">
@@ -67,6 +66,7 @@
                     </div>
                 </div>
 
+
                 <!-- SECTION START -->
                 <div class="row">
                     <div class="iwander-section">
@@ -78,8 +78,9 @@
                         <!-- ATTRACTIONS LIST START -->
                         <div class="col-12">
                             <div class="row">
-
                                 <div class="col-12 col-lg-4 col-md-6" v-for="attraction in attractions.slice(0,6)">
+
+
                                     <div class="card-b">
                                         <!-- CARD BUTTONS -->
                                         <div class="card-buttons">
@@ -116,11 +117,10 @@
                                                     <h6>{{attraction.attraction.name}}</h6>
                                                 </router-link>
                                             </div>
-                                        </a>
 
+                                        </a>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                         <!-- ATTRACTIONS LIST END -->
@@ -133,6 +133,7 @@
 
                     </div>
                 </div>
+
 
 
                 <div class="row">
@@ -178,7 +179,6 @@
                                         </a>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
 
@@ -187,7 +187,6 @@
                                 <button class="btn btn-primary">Show All</button>
                             </router-link>
                         </div>
-
                     </div>
                 </div>
 
@@ -217,18 +216,19 @@
                                             </div>
                                         </a>
                                     </div>
+
                                 </div>
                                 <!-- CARD END -->
+
                             </div>
                         </div>
 
                     </div>
                 </div>
             </div>
+            <addToItinerary v-if="show_modal" @submit="show_modal = false" @close="show_modal = false" :aOr="addToItineraryKey" :id="addToItineraryID"> </addToItinerary>
+            <alert v-if="show_alert" @close="show_alert = false"> </alert>
         </div>
-
-        <addToItinerary v-if="show_modal" @submit="show_modal = false" @close="show_modal = false" :aOr="addToItineraryKey" :id="addToItineraryID"> </addToItinerary>
-        <alert v-if="show_alert" @close="show_alert = false" :alertMessage="alertMessage"> </alert>
     </div>
 </div>
 </template>
@@ -301,7 +301,7 @@ export default {
             defaultImageCity: '',
             defaultImageAttraction: '',
             publicPath: '/images/',
-            storagePath: '../storage/images/',
+            storagePath: '/uploads/',
             dropdowns: []
         }
     },
@@ -320,6 +320,7 @@ export default {
             this.debouncedGetCityData();
             this.debouncedGetCity();
             this.debouncedGetAttractions();
+            this.debouncedGetCitiesinDistrict();
             window.scrollTo(0, 0); //scroll to top of the window
         }
     },
@@ -327,6 +328,7 @@ export default {
         this.debouncedGetCityData = _.debounce(this.getCityData);
         this.debouncedGetCity = _.debounce(this.getCity);
         this.debouncedGetAttractions = _.debounce(this.getAttractions);
+        this.debouncedGetCitiesinDistrict = _.debounce(this.getCitiesinDistrict);
     },
     methods: {
         getCityData() {
@@ -339,13 +341,9 @@ export default {
                 })
                 .then(response => {
                     let results = response.data.data;
-                    // console.log('res', results);
-                    // console.log(app.city_data);
                     results.forEach((result) => {
-                        // console.log('res', result);
                         app.district = result.districts.name;
                         app.country = result.districts.country.name;
-                        // console.log('District:', app.district);
                     })
                     app.city_data = results;
                     this.getCitiesinDistrict();
@@ -359,12 +357,10 @@ export default {
             axios.get(cityUrl(app.city), config)
                 .then(response => {
                     let results = response.data.location_suggestions;
-                    // console.log('city Data: ', results);
                     results.forEach((result) => {
                         app.city_id = result.city_id;
                         app.entity_id = result.entity_id;
                         app.entity_type = result.entity_type;
-                        // console.log('entity_type',app.entity_type);
                     })
                     this.getRestaurants(app.entity_id, app.entity_type);
                 })
@@ -377,7 +373,6 @@ export default {
             axios.get(restaurantUrl(entity_id, entity_type), config)
                 .then(function(response) {
                     let restaurants = response.data.restaurants;
-                    // console.log(restaurants);
                     restaurants.forEach((result) => {
                         let img = result.restaurant.featured_image;
                         if (result.restaurant.featured_image == "") {
@@ -393,9 +388,11 @@ export default {
         },
         getCitiesinDistrict() {
             let app = this;
+            app.citiesindistricts = [];
             axios.get(`/api/get-cities/${app.country}`)
                 .then(response => {
                     let citiesData = response.data.data;
+                    console.log(citiesData);
                     citiesData.forEach((result) => {
                         let cities = result.cities;
                         cities.forEach((res) => {
@@ -437,8 +434,6 @@ export default {
                                 console.log(error);
                             });
                     });
-
-
                 })
                 .catch(function(error) {
                     console.log(error);
@@ -477,10 +472,7 @@ export default {
                             }
                         })
                         .then(function(response) {
-                            // alert(response.message);
                             console.log("ATTRACTION SUCCESSFULLY ADDED TO BOOKMARK");
-                            // console.log(response.data);
-                            app.alertMessage = "Added to bookmarks!";
                             app.show_alert = true;
                         })
                         .catch(function(error) {
@@ -500,9 +492,7 @@ export default {
                         })
                         .then(function(response) {
                             console.log("RESTAURANT SUCCESSFULLY ADDED TO BOOKMARK");
-                            app.alertMessage = "Added to bookmarks!";
                             app.show_alert = true;
-                            // console.log(response.data);
                         })
                         .catch(function(error) {
                             console.log(error);
@@ -588,7 +578,8 @@ export default {
     },
     computed: {
         cities() {
-            return this.citiesindistricts.slice(0, 8);
+            let cities = _.uniqBy(this.citiesindistricts, 'id');
+            return cities.slice(0, 8);
         }
     }
 }

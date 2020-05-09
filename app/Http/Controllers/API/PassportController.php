@@ -50,7 +50,7 @@ class PassportController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|exists:users',
-            'password' => 'required|min:6',
+            'password' => 'required',
         ]);
 
         //if log in attempt fail

@@ -11,16 +11,16 @@
 
                 <div class="card-body">
                     @if ($errors->any())
-                        <div class="alert alert-danger">
-                            <ul>
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
                     @endif
 
-                    <form method="POST" action="{{ route('admin.attractions.update', $attraction->id) }}"  enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('admin.attractions.update', $attraction->id) }}" enctype="multipart/form-data">
                         <input type="hidden" name="_method" value="PUT" />
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
@@ -29,18 +29,19 @@
                             <input type="text" class="form-control" id="name" name="name" value="{{ old('name', $attraction->name) }}" />
                         </div>
                         <div class="form-group">
-                            <label for="category_id">Categories</label><br/>
+                            <label for="category_id">Categories</label><br />
                             @foreach ($categories as $category)
-                              <input type="checkbox" name="categories[]" id="categories" value="{{$category->id}}"/>
-                              {{ $category->name}}
+                                <input type="checkbox" name="categories[]" id="categories" value="{{$category->id}}" {{ (in_array($category->id, $category_attraction_ids)) ? "checked":""}}  />
+                            {{ $category->name}}
                             @endforeach
                         </div>
+                        {{-- {{$attraction->categories}} --}}
 
                         <div class="form-group">
-                            <label for="category_id">Keywords</label><br/>
+                            <label for="keywords">Keywords</label><br />
                             @foreach ($keywords as $keyword)
-                              <input type="checkbox" name="keywords[]" id="keywords" value="{{$keyword->id}}"/>
-                              {{ $keyword->name}}
+                            <input type="checkbox" name="keywords[]" value="{{$keyword->id}}" {{ (in_array($keyword->id, $keyword_attraction_ids)) ? "checked":"" }} />
+                            {{ $keyword->name}}
                             @endforeach
                         </div>
 
@@ -111,11 +112,11 @@
                             <select class="form-control" id="district_id" name="district_id">
                                 <option></option>
                                 @unless ( empty($attraction->addresses->district->name) )
-                                    @foreach ($districts as $district)
-                                    <option value="{{ $district->id }}" {{ (old('district_id', $attraction->addresses->district->id) == $district->id) ? "selected" : "" }}>
-                                        {{ $district->name }}
-                                    </option>
-                                    @endforeach
+                                @foreach ($districts as $district)
+                                <option value="{{ $district->id }}" {{ (old('district_id', $attraction->addresses->district->id) == $district->id) ? "selected" : "" }}>
+                                    {{ $district->name }}
+                                </option>
+                                @endforeach
                                 @endunless
                             </select>
                         </div>
@@ -138,15 +139,15 @@
                         </div>
 
                         <div class="form-group">
-                          <div class="custom-file">
-                              <input type="file" name="image" id="image" class="custom-file-input">
-                              <label class="custom-file-label" for="image">Upload image</label>
-                              @if($errors->has('image'))
-                                  <span class="invalid-feedback">
-                                      {{$errors->first('image')}}
-                                  </span>
-                              @endif
-                          </div>
+                            <div class="custom-file">
+                                <input type="file" name="image" id="image" class="custom-file-input">
+                                <label class="custom-file-label" for="image">Upload image</label>
+                                @if($errors->has('image'))
+                                    <span class="invalid-feedback">
+                                        {{$errors->first('image')}}
+                                    </span>
+                                    @endif
+                            </div>
                         </div>
 
                         <a href="{{ route('admin.attractions.show', $attraction->id) }}" class="btn btn-link">Cancel</a>

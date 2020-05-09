@@ -42,7 +42,7 @@
                                     <h6>Contact</h6>
                                     <p>
                                         {{attraction.details.phone}}<br />
-                                        <a :href="attraction.details.website">{{attraction.details.website}}</a><br />
+                                        <a :href="attraction.details.website" target="_blank">{{attraction.details.website}}</a><br />
                                         <a href="#">{{attraction.details.email}}</a>
                                     </p>
                                 </div>
@@ -115,12 +115,12 @@
                                 </tr>
                             </table>
                         </div>
-
                     </div>
-
-
                 </div>
             </div>
+
+            <addToItinerary v-if="show_modal" @submit="show_modal = false" @close="show_modal = false" :aOr="addToItineraryKey" :id="addToItineraryID"> </addToItinerary>
+            <alert v-if="show_alert" @close="show_alert = false"> </alert>
         </div>
 
         <!---------- SECTION START ---------->
@@ -164,20 +164,15 @@
                                         </router-link>
                                     </div>
                                 </a>
-
                             </div>
                         </div>
                     </div>
                 </div>
                 <!-- ATTRACTIONS LIST END -->
-
             </div>
         </div>
         <!---------- SECTION END ---------->
     </div>
-    <addToItinerary v-if="show_modal" @submit="show_modal = false" @close="show_modal = false" :aOr="addToItineraryKey" :id="addToItineraryID"> </addToItinerary>
-    <alert v-if="show_alert" @close="show_alert = false" :alertMessage="alertMessage"> </alert>
-
 </div>
 </template>
 <script>
@@ -201,7 +196,7 @@ export default {
             categories: [],
             similarAttractions: [],
             publicPath: '/images/',
-            storagePath: '../storage/images/',
+            storagePath: '/uploads/',
             businessHours: [],
             categories_name: [],
             isLoaded: false,
@@ -278,7 +273,6 @@ export default {
                     .then(response => {
                         console.log("ATTRACTION SUCCESSFULLY ADDED TO BOOKMARK");
                         // console.log(response.data);
-                        app.alertMessage = "Added to bookmarks!";
                         app.show_alert = true;
                     })
                     .catch(function(error) {
@@ -302,7 +296,7 @@ export default {
                 this.$router.push({
                     name: 'login'
                 });
-                // window.scrollTo(0, 0);
+                window.scrollTo(0, 0);
             }
         },
         getCategory() {
@@ -331,7 +325,7 @@ export default {
                 .then(response => {
                     let results = response.data.data;
                     let res_id = '';
-                    console.log(results);
+                    console.log('res',results);
                     // console.log(response);
                     results.forEach((res) => {
                         // console.log(res);
@@ -373,6 +367,7 @@ export default {
     },
     computed: {
         uniqueAttractions() {
+            this.similarAttraction = _.shuffle(this.similarAttractions);
             return _.uniqBy(this.similarAttractions, 'id');
         }
     }

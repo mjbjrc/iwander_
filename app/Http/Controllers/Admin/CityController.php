@@ -71,6 +71,8 @@ class CityController extends Controller
             $ext = $image->getClientOriginalExtension();
             $filename = uniqid().'.'.$ext;
             $image->storeAs('public/images', $filename);
+            $path = public_path().'/uploads';
+            $upload = $image->move($path, $filename);
             Storage::delete("public/images/{$city->image}");
             $city->image = $filename;
         }
@@ -142,6 +144,8 @@ class CityController extends Controller
             $ext = $image->getClientOriginalExtension();
             $filename = uniqid().'.'.$ext;
             $image->storeAs('public/images', $filename);
+            $path = public_path().'/uploads';
+            $upload = $image->move($path, $filename);
             Storage::delete("public/images/{$city->image}");
             $city->image = $filename;
         }
