@@ -24,8 +24,9 @@ class DatabaseSeeder extends Seeder
       $this->call(BusinessHoursTableSeeder::class);
       $this->call(AttractionCategorySeeder::class);
       $this->call(AttractionKeywordTableSeeder::class);
-      $this->call(ItinerariesTableSeeder::class);
-      $this->call(EventsTableSeeder::class);
-      $this->call(EventsItinerariesTableSeeder::class);
+      //comment for heroku 
+      // $this->call(ItinerariesTableSeeder::class);
+      // $this->call(EventsTableSeeder::class);
+      // $this->call(EventsItinerariesTableSeeder::class);
     }
 }
