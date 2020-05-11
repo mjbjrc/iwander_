@@ -1603,7 +1603,7 @@ a.builder-next h5::after {
 }
 
 .ht-block img {
-    width: 45vw;
+    width: 100%;
     height: auto;
     -webkit-box-shadow: 7px 6px 10px 0px rgba(0, 0, 0, 0.36);
     -moz-box-shadow: 7px 6px 10px 0px rgba(0, 0, 0, 0.36);
