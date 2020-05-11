@@ -9,7 +9,7 @@
                         <h2>Sign In</h2>
                         <p>Don't have an account yet? <router-link to="/register-account">Sign Up</router-link></p>
                     </div>
-
+                    <!-- LOG IN FORM -->
                     <form v-on:submit.prevent="login">
                         <div class="row">
                             <div class="form-group col-12">
@@ -33,6 +33,7 @@
                             </div>
                         </div>
                     </form>
+                    <!-- END LOG IN FORM -->
             </div>
         </div>
     </div>
@@ -44,15 +45,16 @@
 export default {
     name: 'login',
     props: ['app'],
-    components: {
-
-    },
+    components: {},
     data() {
         return {
             email: "",
             password: "",
             errors: []
         }
+    },
+    mounted(){
+      window.scrollTo(0, 0);
     },
     methods: {
         login() {
@@ -63,21 +65,15 @@ export default {
                 })
                 .then(function(response) {
                     console.log(response.data);
-                    app.name = response.data.name;
-                    app.email = response.data.email;
                     localStorage.setItem("token", response.data.token);
                     app.$emit('login');
                     //go to home
                     app.$router.push({
                         name: 'home'
                     });
-                    // location.reload();
                 })
                 .catch(function(error) {
-                  console.log(error.response.data.errors);
-                  if(error.response.data.errors === "Unauthorised"){
-                    app.errors = error.response.data.errors;
-                  }
+                    console.log(error.response.data.errors);
                     app.errors = error.response.data.errors;
                 });
         },
@@ -94,8 +90,3 @@ export default {
     }
 }
 </script>
-
-<style scoped>
-
-
-</style>

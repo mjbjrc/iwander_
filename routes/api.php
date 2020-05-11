@@ -18,8 +18,6 @@ Route::post('login', 'API\PassportController@login');
 Route::post('register', 'API\PassportController@register');
 
 Route::post('createitinerary', 'API\ItineraryController@create');
-Route::post('addtoitinerary', 'API\EventController@create');
-Route::post('update-event/{id}', 'API\EventController@update');
 
 Route::get('getAttractions/{city}', 'API\AttractionController@getAttractions');
 Route::get('getAttraction/{id}', 'API\AttractionController@getAttraction');
@@ -28,11 +26,7 @@ Route::get('getAllItineraries', 'API\ItineraryController@getAllItineraries');
 
 
 Route::get('get-city/{city}', 'API\CityController@viewCity');
-// Route::get('get-cities/{district}', 'API\DistrictController@getCities');
 Route::get('get-cities/{country}', 'API\CountryController@getCitiesofCountry');
-
-
-
 
 Route::get('getCategories', 'API\CategoryController@getCategories');
 Route::get('getCategoriesOfAttraction/{id}', 'API\CategoryController@getCategoriesOfAttraction');
@@ -51,12 +45,14 @@ Route::get('search', 'API\SearchController@search');
 Route::middleware('auth:api')->group(function () {
   //allow send back user information that is currently logged in
   Route::get('user', 'API\PassportController@user');
+
   Route::get('logout', 'API\PassportController@logout');
   Route::get('viewbookmarks', 'API\BookmarkController@viewBookmarks');
   Route::get('viewItineraries', 'API\ItineraryController@view');
 
   Route::get('viewEvents/{id}', 'API\EventController@view');
   Route::get('edit/event/{id}','API\EventController@edit');
+  Route::post('update-event/{id}', 'API\EventController@update');
   Route::get('getItinerary', 'API\ItineraryController@getItinerary');
 
 
@@ -69,5 +65,8 @@ Route::middleware('auth:api')->group(function () {
 
   Route::post('createBookmarks', 'API\BookmarkController@createBookmarks');
   Route::post('createitinerary', 'API\ItineraryController@create');
+
+  Route::post('addtoitinerary', 'API\EventController@create');
+
 
 });

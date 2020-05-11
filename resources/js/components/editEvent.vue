@@ -71,7 +71,6 @@ export default {
             .then(function(response) {
                 console.log("Event:", response.data);
                 app.event = response.data;
-                // console.log(app.event);
             })
             .catch(function(error) {
                 console.log(error);
@@ -80,7 +79,13 @@ export default {
     methods: {
         updateItinerary() {
             let app = this;
-            axios.post(`/api/update-event/${app.event_id}`, app.event)
+            let token = localStorage.getItem("token");
+            axios.post(`/api/update-event/${app.event_id}`, app.event,
+              {
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                },
+              })
                 .then(function(response) {
                     console.log(response.data);
                     app.$emit('submit');

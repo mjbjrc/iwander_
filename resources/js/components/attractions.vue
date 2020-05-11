@@ -5,10 +5,10 @@
             <div class="col-12">
                 <div class="row">
 
+                    <!-- FILTER OPTIONS -->
                     <div class="col-lg-3 col-md-3 filters-col d-none d-md-block d-lg-block">
                         <div class="filters-block">
                             <h6>Categories</h6>
-
                             <ul class="list-group filter-selection">
                                 <div v-if="showLessCategories">
                                     <li class="list-group-item" v-for="category in LessCategories">
@@ -53,6 +53,7 @@
                         </div>
                     </div>
 
+                    <!-- ATTRACTIONS -->
                     <div class="col-lg-8 offset-lg-1 col-md-8 offset-md-1">
                         <div class="row items-index">
 
@@ -125,14 +126,11 @@ export default {
     },
     methods: {
         getAttractions() {
-          let count = 8;
             let app = this;
             // console.log('Attraction - get cities:', app.itinerary.destination);
             axios.get(`/api/getAttractions/${app.itinerary.destination}`)
                 .then(response => {
-
                     app.attractions = response.data.data;
-
                     console.log(app.attractions);
                 })
                 .catch(function(error) {

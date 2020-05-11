@@ -19,6 +19,9 @@
 </template>
 <script>
 export default{
-  name: 'home'
+  name: 'home',
+  mounted(){
+    window.scrollTo(0, 0);
+  }
 }
 </script>

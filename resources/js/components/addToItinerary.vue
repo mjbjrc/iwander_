@@ -12,7 +12,6 @@
                         </div>
                         <div class="col-12">
                             <form v-on:submit.prevent="addtoitinerary">
-
                                 <div class="form-row">
                                     <div class="form-group col-12">
                                         <label class="required" for="itinerary_id">Itinerary</label>
@@ -71,10 +70,9 @@ export default {
     data() {
         return {
           moment: moment,
-            event: {},
-            itineraries: "",
-            select: "Select Itinerary",
-            errors: {}
+          event: {},
+          itineraries: "",
+          errors: {}
         }
     },
     mounted() {
@@ -83,17 +81,20 @@ export default {
     },
     methods: {
         setValues() {
-            console.log('aOr', this.aOr);
-            console.log('id', this.id);
+            // aOr = Attraction or Restaurant
+            // if 0, id is attraction_id
             if (this.aOr == 0) {
                 this.event.attraction_id = this.id;
-            } else {
+            }
+            //if 1, id is restaurant_id
+            else {
                 this.event.restaurant_id = this.id;
             }
         },
         getItineraries() {
             let app = this;
             let token = localStorage.getItem("token");
+            // get all itineraries
             axios.get('/api/viewItineraries', {
                     headers: {
                         Authorization: "Bearer " + token
@@ -102,7 +103,7 @@ export default {
                 .then(response => {
                     let results = response.data.data;
                     app.itineraries = results;
-                    console.log(results);
+                    // console.log(results);
                 })
                 .catch(function(error) {
                     console.log(error);
@@ -110,6 +111,7 @@ export default {
         },
         addtoitinerary() {
             let app = this;
+            let token = localStorage.getItem("token");
             axios.post('/api/addtoitinerary', {
                     restaurant_id: app.event.restaurant_id,
                     attraction_id: app.event.attraction_id,
@@ -118,13 +120,16 @@ export default {
                     date: app.event.date,
                     notes: app.event.notes,
                     itinerary_id: app.event.id
+                },{
+                  headers: {
+                      Authorization: "Bearer " + token
+                  }
                 })
                 .then(function(response) {
                     console.log(response.data);
                      app.$emit('submit');
                 })
                 .catch(function(error) {
-                    console.log(error);
                     app.errors = error.response.data.errors;
                     console.log(error);
                 });

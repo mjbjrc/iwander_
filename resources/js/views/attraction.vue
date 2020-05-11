@@ -185,7 +185,8 @@ var moment = require('moment');
 export default {
     name: 'attraction',
     components: {
-        addToItinerary, alert
+        addToItinerary,
+        alert
     },
     props: ['app', 'att_id', 'user'],
     data() {
@@ -211,7 +212,7 @@ export default {
         //rerender the component
         att_id: function(newVal, oldVal) {
             immediate: true,
-            console.log('prop changed: ', newVal, '| was: ', oldVal);
+            // console.log('prop changed: ', newVal, '| was: ', oldVal);
             this.debouncedGetAttraction();
             window.scrollTo(0, 0); //scroll to top of the window
         }
@@ -220,6 +221,7 @@ export default {
         this.debouncedGetAttraction = _.debounce(this.getAttraction);
     },
     mounted() {
+      window.scrollTo(0, 0);
         this.getAttraction();
         this.getCategory();
         // this.getSimilarAttractions();
@@ -234,19 +236,18 @@ export default {
                     app.attraction = response.data.data;
                     app.businessHours = response.data.hours;
 
-                    if(app.businessHours.length > 0){
-                      app.businessHours.forEach((hours) => {
-                        if(hours.open_time === null && hours.close_time === null){
-                          hours.open_time = "CLOSED";
-                        }
-                        else{
-                            hours.open_time = moment(hours.open_time, "HH:mm:ss").format('HH:mm');
-                            hours.close_time = moment(hours.close_time, "HH:mm:ss").format('HH:mm');
-                        }
-                      });
-                    }
-                    else {
-                      app.noHours = true;
+                    //checks if there's business hours
+                    if (app.businessHours.length > 0) {
+                        app.businessHours.forEach((hours) => {
+                            if (hours.open_time === null && hours.close_time === null) {
+                                hours.open_time = "CLOSED";
+                            } else {
+                                hours.open_time = moment(hours.open_time, "HH:mm:ss").format('HH:mm');
+                                hours.close_time = moment(hours.close_time, "HH:mm:ss").format('HH:mm');
+                            }
+                        });
+                    } else {
+                        app.noHours = true;
                     }
 
                     app.attractionLoaded = true;
@@ -259,13 +260,13 @@ export default {
             let app = this;
             let token = localStorage.getItem("token");
             if (token !== null) {
-                let data = {
-                    user_id: app.user.id,
-                    restaurant_id: null,
-                    itinerary_id: null,
-                    attraction_id: id
-                }
-                axios.post('/api/createBookmarks', data, {
+
+                axios.post('/api/createBookmarks', {
+                        user_id: app.user.id,
+                        restaurant_id: null,
+                        itinerary_id: null,
+                        attraction_id: id
+                    }, {
                         headers: {
                             Authorization: "Bearer " + token
                         }
@@ -288,6 +289,7 @@ export default {
         },
         addToItinerary(key, id) {
             let token = localStorage.getItem("token");
+            // if user is logged in, show modal else lead user to log in page
             if (token !== null) {
                 this.show_modal = true;
                 this.addToItineraryID = id;
@@ -310,8 +312,6 @@ export default {
                         app.categories_name.push(category.name);
                     })
                     app.getSimilarAttractions();
-                    // console.log('categories', app.categories);
-
                 })
                 .catch(function(error) {
                     console.log(error);
@@ -325,7 +325,7 @@ export default {
                 .then(response => {
                     let results = response.data.data;
                     let res_id = '';
-                    console.log('res',results);
+                    console.log('res', results);
                     // console.log(response);
                     results.forEach((res) => {
                         // console.log(res);
@@ -350,8 +350,6 @@ export default {
                                     similarAttraction: res,
                                     attraction_category: categ
                                 });
-                                // app.similarAttractions = _.shuffle(app.similarAttractions);
-                                // app.similarAttractions = _.uniqBy(this.similarAttractions, 'id');
                             })
                             .catch(function(error) {
                                 console.log(error);
@@ -362,7 +360,7 @@ export default {
                 .catch(function(error) {
                     console.log(error);
                 });
-                app.isLoaded = true;
+            app.isLoaded = true;
         }
     },
     computed: {

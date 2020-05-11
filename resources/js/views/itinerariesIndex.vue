@@ -56,6 +56,7 @@ export default {
         }
     },
     created() {
+        window.scrollTo(0, 0);
         this.getUser();
         this.getAllItineraries();
     },
@@ -85,16 +86,17 @@ export default {
                 })
                 .then(function(response) {
                     let itineraries = response.data.data;
-                    // app.itineraries = response.data.data;
-                    // console.log(app.itineraries);
-                    // console.log('itineraries', response.data.data);
 
                     itineraries.forEach((itinerary) => {
+                        //count days
                         let start = moment(itinerary.start_date).subtract(1, 'd');
                         let end = moment(itinerary.end_date);
                         end.from(start); // "in 5 days"
                         let day = end.from(start, true); // "5 days"
-
+                        //instead of "a day"
+                        if (day === 'a day') {
+                            day = '1 day';
+                        }
                         app.itineraries.push({
                             itinerary: itinerary,
                             days: day

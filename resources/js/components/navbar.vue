@@ -86,22 +86,22 @@ import autocomplete from './autocomplete'
     },
     methods: {
       logout(){
+        let app = this;
         let token = localStorage.getItem('token');
         axios.get('/api/logout',{
           headers: {Authorization: "Bearer " + token}
         })
         .then(function(response){
-          console.log(response);
+          console.log("USER LOGGED OUT");
+          localStorage.removeItem('token');
+          app.$emit('logout');
+          // go to home page
+          app.$router.push({name: 'home'});
         })
         .catch(function(error){
           console.log(error);
         });
 
-        console.log("USER LOGGED OUT");
-        localStorage.removeItem('token');
-        // this.checkIfLoggedIn();
-        this.$emit('logout');
-        this.$router.push({name: 'home'});
       }
     }
   }

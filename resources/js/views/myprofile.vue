@@ -161,6 +161,7 @@ export default {
         }
     },
     mounted() {
+        window.scrollTo(0, 0);
         this.viewItineraries();
         this.getUser();
         this.viewBookmark();
@@ -238,7 +239,6 @@ export default {
             })
         },
         getUser() {
-            console.log("AGAIN");
             let app = this;
             let token = localStorage.getItem("token");
             axios.get('/api/user', {

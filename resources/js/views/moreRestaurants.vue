@@ -290,9 +290,9 @@ export default {
 
             app.start += 21;
             app.count += 20;
-            console.log(app.start);
-            console.log(app.count);
-            console.log("CONTINUE");
+            // console.log(app.start);
+            // console.log(app.count);
+            // console.log("CONTINUE");
             axios.get(filterResults(this.$route.params.entity_id, this.$route.query.entity_type, app.start, app.count, cuisines, establishments, categories, app.sortBy), config)
                 .then(function(response) {
                     let morerestaurants = response.data.restaurants;

@@ -42,12 +42,14 @@ class EventController extends Controller
     return response()->json(['message' => 'Event added to itinerary', 'data' => $event], 200);
   }
 
+  //get event
   public function edit($id){
     // dd($request);
     $event = Event::find($id);
     return response()->json($event);
   }
 
+  //update event
   public function update($id, Request $request){
     $event = Event::find($id);
     $event->update($request->all());

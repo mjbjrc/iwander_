@@ -10,7 +10,6 @@
                         <jam-close/>
                       </button>
                       <h4>Added to bookmarks!</h4>
-                      <!-- <h4>{{this.alertMessage}}</h4> -->
                     </slot>
                 </div>
             </div>
@@ -20,16 +19,7 @@
 </template>
 <script>
 export default {
-    name: 'alert',
-    // props: ['alertMessage'],
-    data() {
-        return {
-
-        }
-    },
-    methods: {
-
-    }
+    name: 'alert'
 }
 </script>
 

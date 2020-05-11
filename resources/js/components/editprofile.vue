@@ -10,6 +10,7 @@
 
                           </div>
                       </div>
+                      <!-- EDIT AVATAR -->
                       <div class="col-12">
                           <form v-on:submit.prevent="uploadImage" enctype="multipart/form-data">
                               <div class="form-row">
@@ -40,12 +41,10 @@
 <script>
 export default{
   name: 'editprofile',
-  // props: ['user'],
   components: {},
   data(){
     return{
       user: {},
-      // default: true
     }
   },
   created(){
@@ -64,33 +63,34 @@ export default{
       });
     },
     methods:{
-    newImage(){
-      let file = event.target.files[0];
-      this.user.image = file;
-    },
-    uploadImage(){
-      let app = this;
-      let token = localStorage.getItem("token");
+      newImage(){
+        let file = event.target.files[0];
+        //set image
+        this.user.image = file;
+      },
+      uploadImage(){
+        let app = this;
+        let token = localStorage.getItem("token");
 
-      let data = new FormData();
-      data.append('name', app.user.name);
-      data.append('email', app.user.email);
-      data.append('password', app.user.password);
-      data.append('image', app.user.image);
-      axios.post('/api/profile', data, {
-        headers: { 'Authorization': "Bearer " + token,
-                    'Content-Type': 'multipart/form-data'}
-      })
-      .then(res => {
-        console.log(res);
-        app.$emit('submit');
-        // app.default = false;
+        let data = new FormData();
+        data.append('name', app.user.name);
+        data.append('email', app.user.email);
+        data.append('password', app.user.password);
+        data.append('image', app.user.image);
 
-      })
-      .catch(function(error){
-          console.log(error);
-      });
-    }
+        axios.post('/api/profile', data, {
+          headers: { 'Authorization': "Bearer " + token,
+                      'Content-Type': 'multipart/form-data'}
+        })
+        .then(res => {
+          console.log(res);
+          app.$emit('submit');
+
+        })
+        .catch(function(error){
+            console.log(error);
+        });
+      }
   }
 }
 </script>

@@ -1,7 +1,6 @@
 <template>
   <div>
     <navbar :app="this" v-if="!$route.meta.hideNavigation" :isLoggedIn="isLoggedIn" @login="login()" @logout="logout()"></navbar>
-    <!-- <itinerarybuilderNav v-if="$route.meta.showItineraryBuilder" @proceed="proceed()"></itinerarybuilderNav> -->
 
       <router-view :user="this.user" :isLoggedIn="isLoggedIn" @login="login()" @logout="logout()"> </router-view>
     <footerbar v-if="!$route.meta.hideFooter"></footerbar>
@@ -33,7 +32,8 @@ import itinerarybuilderNav from './components/itinerarybuilderNav'
         console.log("Check if log in");
         if(token) {
           this.isLoggedIn = true;
-          this.init();
+          //get user data
+          this.getUser();
         } else {
           this.isLoggedIn = false;
         }
@@ -44,7 +44,7 @@ import itinerarybuilderNav from './components/itinerarybuilderNav'
       logout(){
         this.isLoggedIn = false;
       },
-      init(){
+      getUser(){
         let token = localStorage.getItem("token");
         axios.get('/api/user',{
           headers: { Authorization: "Bearer " + token }
@@ -52,7 +52,7 @@ import itinerarybuilderNav from './components/itinerarybuilderNav'
         .then(response => {
           console.log('USER DEETS',response.data.user);
           this.user = response.data.user;
-          console.log(this.user.id);
+          // console.log(this.user.id);
         })
         .catch(function(error){
           console.log(error);

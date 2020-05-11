@@ -32,7 +32,7 @@
                             <div class="form-group col-12">
                                 <label for="password_confirmation">Confirm password</label>
                                 <input id="password_confirmation" v-model="password_confirmation" type="password" class="form-control" name="password_confirmation"  autocomplete="new-password">
-                                <span class="errors">{{ getErrors('passwordConfirmation') }}</span>
+                                <span class="errors">{{ getErrors('password') }}</span>
                             </div>
 
                             <div class="form-button col-12">
@@ -52,9 +52,7 @@
 export default {
     name: 'register',
     props: ['app'],
-    components: {
-
-    },
+    components: {},
     data() {
         return {
             name: '',
@@ -63,6 +61,9 @@ export default {
             password_confirmation: '',
             errors: []
         }
+    },
+    mounted(){
+      window.scrollTo(0, 0);
     },
     methods: {
         register() {
@@ -75,18 +76,16 @@ export default {
                 })
                 .then(function(response) {
                     console.log(response.data);
-                    app.name = response.data.name;
-                    app.email = response.data.email;
                     localStorage.setItem("token", response.data.token);
+                    app.$emit('login');
                     //go to home page
-                    app.$router.replace({
+                    app.$router.push({
                         name: 'home'
                     });
-                    location.reload();
                 })
                 .catch(function(error) {
                   app.errors = error.response.data.errors;
-                    console.log(error);
+                  console.log(error);
                 });
         },
         getErrors(field){
@@ -97,8 +96,3 @@ export default {
     }
 }
 </script>
-
-<style scoped>
-
-
-</style>

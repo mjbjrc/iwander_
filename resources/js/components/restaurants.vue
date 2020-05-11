@@ -100,7 +100,7 @@
                                 <button class="btn btn-primary" @click="loadMore">Show More</button>
                             </div>
 
-                            <addEvent v-if="show_modal" @close="show_modal = false" :data="this.res_id" :itinerary="this.itinerary"> </addEvent>
+                            <addEvent v-if="show_modal" @close="show_modal = false" :restaurant_id="this.res_id" :itinerary="this.itinerary"> </addEvent>
 
                         </div>
                     </div>
@@ -178,7 +178,6 @@ export default {
             categoryValues: [],
             cuisineValues: [],
             sortBy: '',
-
             showLessCategories: true,
             showLessEstablishments: true,
             showLessCuisines: true,
@@ -187,6 +186,7 @@ export default {
     watch:{
       sort: function(newVal, oldVal) {
         console.log('sort changed: ', newVal, '| was: ', oldVal);
+        //get restaurants
         this.getRestaurants();
       }
     },
@@ -272,7 +272,6 @@ export default {
                 // axios.get(filterResults(this.$route.params.entity_id, this.$route.query.entity_type, cuisines, establishments, categories, app.sortBy), config)
                 .then(function(response) {
                     // console.log(response);
-                    // console.log(response.data.results_found);
                     if (response.data.results_found == 0) {
                         // console.log("none");
                         app.more = false;
@@ -332,6 +331,7 @@ export default {
         },
         getCuisines() {
             let app = this;
+            //get list of cuisines
             axios.get(getCuisines(app.entity_details.city_id), config)
                 .then(function(response) {
                     app.cuisines = response.data.cuisines;
@@ -342,6 +342,7 @@ export default {
         },
         getCategories() {
             let app = this;
+            //get list of categories
             axios.get(getCategories(app.entity_details.city_id), config)
                 .then(function(response) {
                     app.categories = response.data.categories;
@@ -376,10 +377,3 @@ export default {
     }
 }
 </script>
-
-<style>
-.lnr-plus-circle {
-    color: black;
-    font-size: 20px;
-}
-</style>

@@ -26,10 +26,12 @@ class HomeController extends Controller
     {
       $user = auth()->user();
 
+      //checks if user is admin
       if($user->hasRole('admin')){
         return view('admin.home');
       }
       else{
+        //force log out and revoke token
         Auth::logout();
         $user->user()->token()->revoke();
         return redirect('/');

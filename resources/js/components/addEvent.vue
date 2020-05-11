@@ -26,7 +26,7 @@
                                 <div class="form-group col-12">
                                     <label class="required" for="date">Date</label>
                                     <input id="date" v-model="event.date" type="date" class="form-control" name="date" autocomplete="date">
-                                      <span class="errors">{{ getErrors('date') }}</span>
+                                    <span class="errors">{{ getErrors('date') }}</span>
                                 </div>
                                 <div class="form-group col-12">
                                     <label for="notes">Notes</label>
@@ -52,10 +52,8 @@
 <script>
 export default {
     name: "addEvent",
-    props: ['app', 'data', 'itinerary', 'attraction_id'],
-    components: {
-
-    },
+    props: ['app', 'restaurant_id', 'itinerary', 'attraction_id'],
+    components: {},
     mounted() {
         console.log("Add Event modal");
     },
@@ -66,9 +64,9 @@ export default {
                 end_time: "",
                 date: "",
                 notes: "",
-                restaurant_id: this.data,
+                restaurant_id: this.restaurant_id,
                 attraction_id: this.attraction_id,
-
+                itinerary_id: this.itinerary.id
             },
             errors: []
         }
@@ -76,14 +74,11 @@ export default {
     methods: {
         addtoitinerary() {
             let app = this;
-            axios.post('/api/addtoitinerary', {
-                    restaurant_id: app.event.restaurant_id,
-                    attraction_id: app.event.attraction_id,
-                    start_time: app.event.start_time,
-                    end_time: app.event.end_time,
-                    date: app.event.date,
-                    notes: app.event.notes,
-                    itinerary_id: app.itinerary.id
+            let token = localStorage.getItem("token");
+            axios.post('/api/addtoitinerary', app.event, {
+                    headers: {
+                        Authorization: "Bearer " + token
+                    }
                 })
                 .then(function(response) {
                     console.log(response.data);

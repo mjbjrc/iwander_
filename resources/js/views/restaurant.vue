@@ -16,7 +16,7 @@
                         <div class="main-heading order-lg-1 order-sm-1">
                             <h1>{{results.name}}</h1>
                             <h6 class="subheading">
-                                <jam-star-f/> {{results.user_rating.aggregate_rating}}
+                                <jam-star-f /> {{results.user_rating.aggregate_rating}}
                             </h6>
                             <h6 class="subheading" v-for="cuisine in results.cuisines.split(', ')">{{cuisine}}</h6>
                         </div>
@@ -36,7 +36,7 @@
                                         <h6>Features</h6>
                                         <div v-if="lessHighlights">
                                             <ul class="list-inline">
-                                                <li class="list-inline-item"  v-for="highlight in showLessHighlights">{{highlight}}</li>
+                                                <li class="list-inline-item" v-for="highlight in showLessHighlights">{{highlight}}</li>
                                             </ul>
 
                                             <li class="list-inline-item" v-if="lessHighlights">
@@ -44,7 +44,7 @@
                                             </li>
                                         </div>
                                         <div v-else>
-                                            <ul class="list-inline" >
+                                            <ul class="list-inline">
                                                 <li class="list-inline-item" v-for="highlight in showMoreHighlights">{{highlight}}</li>
 
                                             </ul>
@@ -73,7 +73,7 @@
                     <div class="col-lg-4 offset-lg-1">
 
                         <div class="action-selection">
-                            <a class="btn action-selection-link" href="#" role="button" style="margin-bottom:30px;"  @click="addToBookmarks(results.id)">
+                            <a class="btn action-selection-link" href="#" role="button" style="margin-bottom:30px;" @click="addToBookmarks(results.id)">
                                 <span class="jam jam-heart" data-jam="heart" data-fill="#444" data-width="18" data-height="18"></span> Add to Bookmarks
                             </a>
 
@@ -84,7 +84,7 @@
 
                         <div class="add-info">
                             <h6>Location</h6>
-                            <p  v-for="address in results.location.address.split(',')">
+                            <p v-for="address in results.location.address.split(',')">
                                 {{ address }}<br />
                             </p>
                         </div>
@@ -102,8 +102,8 @@
             </div>
         </div>
     </div>
-        <addToItinerary v-if="show_modal" @submit="show_modal = false" @close="show_modal = false" :aOr="addToItineraryKey" :id="addToItineraryID"> </addToItinerary>
-        <alert v-if="show_alert" @close="show_alert = false" :alertMessage="alertMessage"> </alert>
+    <addToItinerary v-if="show_modal" @submit="show_modal = false" @close="show_modal = false" :aOr="addToItineraryKey" :id="addToItineraryID"> </addToItinerary>
+    <alert v-if="show_alert" @close="show_alert = false" :alertMessage="alertMessage"> </alert>
 
 </div>
 </template>
@@ -128,7 +128,8 @@ function getRestaurant(res_id) {
 export default {
     name: 'restaurant',
     components: {
-        addToItinerary, alert
+        addToItinerary,
+        alert
     },
     props: ['app', 'res_id', 'user'],
     data() {
@@ -144,6 +145,7 @@ export default {
         }
     },
     mounted() {
+      window.scrollTo(0, 0);
         this.viewRestaurant(this.$route.params.res_id);
     },
     methods: {
@@ -151,16 +153,16 @@ export default {
             let app = this;
             axios.get(getRestaurant(query), config)
                 .then(function(response) {
-                  let restaurant = response.data;
+                    let restaurant = response.data;
 
-                  if (restaurant.featured_image == "") {
-                      let img = '/images/default-restaurant.jpg';
-                      restaurant.featured_image = img;
-                  }
+                    if (restaurant.featured_image == "") {
+                        let img = '/images/default-restaurant.jpg';
+                        restaurant.featured_image = img;
+                    }
 
-                  app.results = restaurant;
-                  app.highlights = app.results.highlights;
-                  app.restaurantLoaded = true;
+                    app.results = restaurant;
+                    app.highlights = app.results.highlights;
+                    app.restaurantLoaded = true;
                 })
                 .catch(function(error) {
                     console.log(error);
@@ -170,13 +172,13 @@ export default {
             let app = this;
             let token = localStorage.getItem("token");
             if (token !== null) {
-                let data = {
-                    user_id: app.user.id,
-                    restaurant_id: id,
-                    itinerary_id: null,
-                    attraction_id: null
-                }
-                axios.post('/api/createBookmarks', data, {
+
+                axios.post('/api/createBookmarks', {
+                        user_id: app.user.id,
+                        restaurant_id: id,
+                        itinerary_id: null,
+                        attraction_id: null
+                    }, {
                         headers: {
                             Authorization: "Bearer " + token
                         }

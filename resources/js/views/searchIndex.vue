@@ -228,6 +228,7 @@
             </div>
             <addToItinerary v-if="show_modal" @submit="show_modal = false" @close="show_modal = false" :aOr="addToItineraryKey" :id="addToItineraryID"> </addToItinerary>
             <alert v-if="show_alert" @close="show_alert = false"> </alert>
+
         </div>
     </div>
 </div>
@@ -457,16 +458,18 @@ export default {
         addToBookmarks(i, id) {
             let app = this;
             let token = localStorage.getItem("token");
+            //if user is not logged in, go to sign in page
             if (token !== null) {
+                // if i = 0, bookmark attraction
+                // else bookmark restaurant
                 if (i === 0) {
-                    let data = {
-                        user_id: app.user_id,
-                        restaurant_id: app.bookmark.restaurant_id,
-                        itinerary_id: app.bookmark.itinerary_id,
-                        attraction_id: id
-                    }
 
-                    axios.post('/api/createBookmarks', data, {
+                    axios.post('/api/createBookmarks', {
+                            user_id: app.user_id,
+                            restaurant_id: app.bookmark.restaurant_id,
+                            itinerary_id: app.bookmark.itinerary_id,
+                            attraction_id: id
+                        }, {
                             headers: {
                                 'Authorization': "Bearer " + token
                             }
@@ -479,13 +482,12 @@ export default {
                             console.log(error);
                         });
                 } else {
-                    let data = {
-                        user_id: app.user_id,
-                        restaurant_id: id,
-                        itinerary_id: app.bookmark.itinerary_id,
-                        attraction_id: app.bookmark.attraction_id
-                    }
-                    axios.post('/api/createBookmarks', data, {
+                    axios.post('/api/createBookmarks', {
+                            user_id: app.user_id,
+                            restaurant_id: id,
+                            itinerary_id: app.bookmark.itinerary_id,
+                            attraction_id: app.bookmark.attraction_id
+                        }, {
                             headers: {
                                 'Authorization': "Bearer " + token
                             }
@@ -509,13 +511,13 @@ export default {
             let app = this;
             let token = localStorage.getItem("token");
             if (token !== null) {
-                let data = {
-                    destination: app.itinerary.destination,
-                    start_date: app.itinerary.start_date,
-                    end_date: app.itinerary.end_date,
-                    user_id: app.user_id,
-                }
-                axios.post('/api/createitinerary', data, {
+
+                axios.post('/api/createitinerary', {
+                        destination: app.itinerary.destination,
+                        start_date: app.itinerary.start_date,
+                        end_date: app.itinerary.end_date,
+                        user_id: app.user_id,
+                    }, {
                         headers: {
                             'Authorization': "Bearer " + token
                         }

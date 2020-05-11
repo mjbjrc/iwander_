@@ -154,8 +154,6 @@ export default {
             attractions: [],
             categories: '',
             categoryValues: [],
-            start: 0,
-            count: 20,
             more: true,
             keywords: '',
             keywordsValues: [],
@@ -205,7 +203,7 @@ export default {
                         if (res[i] !== undefined) {
                             app.attractions.push(res[i]);
                         } else {
-                          app.more = false;
+                            app.more = false;
                         }
                     }
                     app.count = app.count + 8;
@@ -222,13 +220,13 @@ export default {
             let app = this;
             let token = localStorage.getItem("token");
             if (token !== null) {
-                let data = {
-                    user_id: app.user.id,
-                    restaurant_id: null,
-                    itinerary_id: null,
-                    attraction_id: id
-                }
-                axios.post('/api/createBookmarks', data, {
+                
+                axios.post('/api/createBookmarks', {
+                        user_id: app.user.id,
+                        restaurant_id: null,
+                        itinerary_id: null,
+                        attraction_id: id
+                    }, {
                         headers: {
                             Authorization: "Bearer " + token
                         }
@@ -365,12 +363,3 @@ export default {
     }
 }
 </script>
-<style>
-.v {
-    margin-top: 5px !important;
-}
-
-.e {
-    padding: 0px !important;
-}
-</style>

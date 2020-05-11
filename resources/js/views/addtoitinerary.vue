@@ -105,6 +105,7 @@ export default {
     },
     mounted() {
         console.log("Add to itinerary page");
+        window.scrollTo(0, 0);
         this.getItinerary();
         this.getCity();
     },
@@ -121,19 +122,12 @@ export default {
             },
             showAttractions: true,
             sortBy: '',
-
         }
     },
     methods: {
       setSortBy(value){
         let app = this;
         app.sortBy = value;
-        console.log('va', app.sortBy);
-      },
-      tabs(){
-        this.$emit('showRestaurants', ()=>{
-          console.log("www");
-        })
       },
         proceed() {
             this.$router.push({
@@ -144,7 +138,6 @@ export default {
                     destination: this.$route.params.destination
                 }
             });
-            console.log("hu");
         },
         getItinerary() {
             let app = this;
@@ -188,7 +181,6 @@ export default {
                         app.entity_details.entity_type = result.entity_type;
                         //data is loaded so restaurant/attraction component can load
                         this.dataloaded = true;
-                        this.restaurantDataLoaded = true;
                     })
                 })
                 .catch(function(error) {

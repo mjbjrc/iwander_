@@ -15,8 +15,8 @@
                         <div class="itinerary-info col-lg-3 col-md-3">
 
                             <div class="action-selection">
+                              <!-- If user own itinerary, show edit and delete button -->
                                 <div class="row" v-if="trueUser">
-
                                     <div class="col-12">
                                         <router-link :to="{name: 'addtoitinerary', params: { destination: this.itinerary.destination}, query: {itinerary_id: this.itinerary.id} }" class="btn action-selection-link">
                                             <span class="jam jam-pencil" data-fill="#444" data-width="18" data-height="18"></span> Edit Itinerary
@@ -28,14 +28,8 @@
                                             <span class="jam jam-trash" data-fill="#444" data-width="18" data-height="18"></span> Delete Itinerary
                                         </a>
                                     </div>
-
-                                    <!-- <div class="col-12">
-                                        <a class="btn action-selection-link" href="#" role="button" @click="addToBookmarks(itinerary.id)">
-                                            <span class="jam jam-heart" data-fill="#444" data-width="18" data-height="18"></span> Add to Bookmarks
-                                        </a>
-                                    </div> -->
-
                                 </div>
+                                <!-- If user do not own itinerary, only show bookmark button -->
                                 <div class="row" v-else>
                                 <div class="col-12">
                                     <a class="btn action-selection-link" href="#" role="button" @click="addToBookmarks(itinerary.id)">
@@ -102,7 +96,7 @@
                 </div>
             </div>
 
-            <alert v-if="show_alert" @close="show_alert = false" :alertMessage="alertMessage"> </alert>
+            <alert v-if="show_alert" @close="show_alert = false"> </alert>
 
         </div>
     </div>
@@ -148,21 +142,19 @@ export default {
             trueUser: '',
             day: '',
             publicPath: '/images/',
-            storagePath: '../storage/images/',
+            storagePath: '/uploads/',
             show_alert: false,
             loaded: false
-            // user: ''
         }
     },
     created() {
+      window.scrollTo(0, 0);
         let app = this;
         axios.get(`/api/getItineraryByID/${app.itinerary_id}`)
             .then(function(response) {
                 app.itinerary = response.data.data;
                 //show first day automatically
                 app.day = app.itinerary.start_date;
-
-                // console.log('itinerary', app.itinerary);
 
                 app.countDays();
                 app.getDates();
@@ -179,6 +171,7 @@ export default {
         checkUser() {
             let app = this;
             let token = localStorage.getItem("token");
+            //if user is logged in
             if(token != null){
               axios.get('/api/user', {
                       headers: {
@@ -188,12 +181,15 @@ export default {
                   .then(response => {
                       let user_id = response.data.user.id;
 
+                      //checks if current user owns the itinerary
                       if (user_id === app.itinerary.user_id) {
                           console.log("SAME USER");
+                          //show edit and delete button
                           app.trueUser = true;
                           app.message = "You have nothing planned on this day!";
                       } else {
                           console.log("NOT THE SAME USER");
+                          //hide edit and delete button
                           app.trueUser = false;
                           app.message = "There's nothing planned for this day!"
                       }
@@ -202,6 +198,7 @@ export default {
                       console.log(error);
                   });
             }
+            //if not logged in
             else{
               app.trueUser = false;
               app.message = "There's nothing planned for this day!"
@@ -225,10 +222,7 @@ export default {
             let eDate = moment(app.itinerary.end_date);
             let day = 1;
             while (sDate <= eDate) {
-                // get the max id in the list and add 1 to it
-                const newId = Math.max.apply(null, app.dates.map(t => t.id)) + 1;
                 tempDates.push({
-                    id: newId,
                     textFormat: "Day " + day + " : " + moment(sDate).format('MMM Do YYYY'),
                     numFormat: moment(sDate).format('YYYY-MM-DD')
                 });
@@ -240,13 +234,10 @@ export default {
         },
         getEvents() {
             let app = this;
-            // app.show = true;
-            // app.showFD = false;
             app.events = [];
             axios.get(`/api/getAttractionsByEvent/${app.itinerary_id}`)
                 .then(response => {
                     let results = response.data.data;
-                    console.log('r', results);
                     results.forEach((event) => {
                       console.log('ev', event);
                         if (event.date == app.day) {
@@ -260,7 +251,7 @@ export default {
                         console.log("NO EVENT");
                         app.noEvent = true;
                     }
-                    console.log('events', app.events);
+                    // console.log('events', app.events);
                     app.viewEvents();
                 })
                 .catch(function(error) {
@@ -291,7 +282,6 @@ export default {
                             console.log(error);
                         });
                 } else {
-                    console.log('m',e.attraction.id);
                     axios.get(`/api/getCategoriesOfAttraction/${e.attraction_id}`)
                         .then(response => {
                             let categories = [];
@@ -320,27 +310,23 @@ export default {
             //display events when loaded
             app.loaded = true;
         },
-        print() {
-            window.print();
-        },
-
         addToBookmarks(id){
           let app = this;
           let token = localStorage.getItem("token");
           if(token!==null){
-            let data = {
+
+            axios.post('/api/createBookmarks',
+            {
               user_id: app.user.id,
               restaurant_id: null,
               itinerary_id: id,
               attraction_id: null
-            }
-            axios.post('/api/createBookmarks', data, {
+            }, {
               headers: { Authorization: "Bearer " + token }
             })
             .then(response => {
               console.log("Itinerary SUCCESSFULLY ADDED TO BOOKMARK");
               // console.log(response.data);
-              app.alertMessage = "Added to bookmarks!";
               app.show_alert = true;
             })
             .catch(function(error){
@@ -362,8 +348,8 @@ export default {
                 })
                 .then(response => {
                     console.log(response);
+                    //go to profile page
                     this.$router.push({name: 'myprofile'});
-                    // this.viewItineraries();
                 })
                 .catch(function(error) {
                     console.log(error);
@@ -371,6 +357,7 @@ export default {
         },
     },
     computed: {
+        //sort events by start_time
         sortByTime() {
             return _.orderBy(this.plans, ['start_time']);
         }

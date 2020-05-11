@@ -195,6 +195,7 @@ export default {
             });
     },
     mounted() {
+      window.scrollTo(0, 0);
         console.log("this is mounted");
     },
     methods: {
@@ -225,16 +226,14 @@ export default {
             let eDate = moment(app.itinerary.end_date);
             let day = 1;
             while (sDate <= eDate) {
-                // get the max id in the list and add 1 to it
-                const newId = Math.max.apply(null, app.dates.map(t => t.id)) + 1;
                 tempDates.push({
-                    id: newId,
                     textFormat: "Day " + day + " : " + moment(sDate).format('Do MMMM YYYY'),
                     numFormat: moment(sDate).format('YYYY-MM-DD')
                 });
                 sDate = moment(sDate).add(1, 'days');
                 day++;
             }
+
             //remove empty arrays
             app.dates = tempDates.filter(val => (val !== undefined) && (val !== null));
         },
