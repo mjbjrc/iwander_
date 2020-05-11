@@ -18,7 +18,7 @@
                 </div>
 
                 <div class="col-12 item-image">
-                    <img src="{{ asset('../images/'.$city->image) }}">
+                    <img src="{{ asset('../uploads/'.$city->image) }}">
                 </div>
 
                 <div class="col-12 item-info">
