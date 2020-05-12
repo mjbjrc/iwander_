@@ -220,7 +220,7 @@ export default {
             let app = this;
             let token = localStorage.getItem("token");
             if (token !== null) {
-                
+
                 axios.post('/api/createBookmarks', {
                         user_id: app.user.id,
                         restaurant_id: null,

@@ -117,11 +117,15 @@ export default {
             categories: '',
             categoryValues: [],
             attractions: [],
+            attractionData: [],
             sortBy: '',
             showLessCategories: true,
             showLessKeywords: true,
             publicPath: '/images/',
-            storagePath: '/uploads/'
+            storagePath: '/uploads/',
+            start: 20,
+            count: 40,
+            more: true
         }
     },
     methods: {
@@ -130,7 +134,8 @@ export default {
             // console.log('Attraction - get cities:', app.itinerary.destination);
             axios.get(`/api/getAttractions/${app.itinerary.destination}`)
                 .then(response => {
-                    app.attractions = response.data.data;
+                    app.attractionData = response.data.data;
+                    app.attractions = app.attractionData.slice(0,20);
                     console.log(app.attractions);
                 })
                 .catch(function(error) {
@@ -167,20 +172,18 @@ export default {
         },
         loadMore() {
             let app = this;
-            let start = 8;
-            let count = 16;
             axios.get(`/api/getAttractions/${app.itinerary.destination}`)
                 .then(function(response) {
-                  let attracTions = [];
-                    let res = response.data.data;
-                    app.more = false;
-                    console.log(start);
-                    for(let i = start; i < count; i++){
-                      if(res[i] !== undefined){
-                          attracTions.push(res[i]);
+                  let res = response.data.data;
+                  for (let i = app.start; i < app.count; i++) {
+                      if (res[i] !== undefined) {
+                          app.attractions.push(res[i]);
+                      } else {
+                          app.more = false;
                       }
-                    }
-                    count = count + 8;
+                  }
+                  app.count = app.count + 8;
+                  app.start = app.start + 8;
                 })
                 .catch(function(error) {
                     console.log(error);
@@ -262,11 +265,10 @@ export default {
             return this.keywords;
         },
         showMoreButton(){
-          if(this.attractions.length > 8){
-            return true;
-          }
-          else {
-            return false;
+          if (this.attractionData.length > 20 && this.more) {
+              return true;
+          } else {
+              return false;
           }
         }
     }
